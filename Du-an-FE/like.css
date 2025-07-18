@@ -1,0 +1,82 @@
+.search-container {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .search-icon {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #aaa;
+    border-radius: 50%;
+    position: relative;
+  }
+  
+  .search-icon::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    background: #aaa;
+    transform: rotate(45deg);
+    bottom: -4px;
+    right: -2px;
+    border-radius: 2px;
+  }
+  
+  /* Hiện đại hóa input chỉ có viền dưới */
+  .search-box {
+    position: relative;
+    width: 200px;
+  }
+  
+  .search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #555;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .search-box input:focus {
+    border-bottom: 2px solid #00bcd4; /* xanh cyan khi focus */
+  }
+  
+  .search-box input::placeholder {
+    color: transparent; /* ẩn placeholder vì ta dùng fake */
+  }
+  
+  .fake-placeholder {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    color: #aaa;
+    pointer-events: none;
+    transition: transform 2s ease-in-out, opacity 0.5s ease;
+    animation: slidePlaceholder 4s infinite;
+  }
+  
+  .search-box input:focus + .fake-placeholder,
+  .search-box input:not(:placeholder-shown) + .fake-placeholder {
+    opacity: 0;
+  }
+  
+  @keyframes slidePlaceholder {
+    0%   { transform: translateX(0); opacity: 1; }
+    40%  { transform: translateX(30px); opacity: 0; }
+    60%  { transform: translateX(-30px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  
+  .fake-placeholder.hidden {
+    opacity: 0 !important;
+    animation: none !important;
+  }
+  

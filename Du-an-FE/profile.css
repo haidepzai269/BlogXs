@@ -1,0 +1,292 @@
+/* Profile Banner */
+.profile-header {
+    position: relative;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #222;
+  }
+  
+  .banner {
+    background-color: #222;
+    height: 150px;
+    width: 100%;
+  }
+  
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #0f0f0f;
+    border: 4px solid black;
+    position: absolute;
+    top: 100px;
+    left: 20px;
+  }
+  
+  .edit-btn {
+    position: absolute;
+    top: 170px;
+    right: 20px;
+    background: transparent;
+    color: #1da1f2;
+    border: 1px solid #1da1f2;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .edit-btn:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+  }
+  
+  .name {
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .username,
+  .joined,
+  .follow-stats {
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  
+  /* Tabs */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid #333;
+    margin-top: 20px;
+  }
+  
+  .tab-bar button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #aaa;
+    padding: 10px 0;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s, border-bottom 0.2s;
+  }
+  
+  .tab-bar button:hover,
+  .tab-bar button.active {
+    color: #1da1f2;
+    border-bottom: 2px solid #1da1f2;
+  }
+  .profile-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    color: #000;
+    padding: 30px 40px;
+    border: 2px solid #000;
+    border-radius: 40px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 350px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .profile-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+  
+  .profile-form label {
+    margin-top: 10px;
+    font-weight: bold;
+    display: block;
+  }
+  
+  .profile-form input {
+    width: 100%;
+    padding: 8px 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #999;
+    background-color: #f5f5f5;
+    color: #000;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .circle-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .circle-btn:hover {
+    background-color: #eaeaea;
+  }
+  
+  .circle-btn.cancel {
+    border-color: #999;
+  }
+  
+  /* Overlay làm mờ nền */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.4); /* bóng mờ tối */
+  z-index: 999;
+}
+
+/* Camera Icon */
+.camera-icon {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.cover-camera {
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+}
+
+.avatar-camera {
+  bottom: 0;
+  right: 0;
+  font-size: 16px;
+}
+
+/* Đảm bảo avatar chứa được ảnh */
+.avatar, #avatarImage {
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Banner có ảnh nền */
+.banner, #bannerImage {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+/* Avatar overlay (toàn màn hình khi hover) */
+.avatar-fullscreen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90vmin;
+  height: 90vmin;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 0%;
+  z-index: 2000;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Khi active (hiện avatar) */
+.avatar-fullscreen.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.post {
+  position: relative;
+
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.delete-post-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.delete-post-btn:hover {
+  color: #e74c3c;
+  transform: scale(1.2);
+}
+
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Ngăn cuộn toàn bộ */
+}
+
+
+.scrollable-posts {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px; /* để tránh thanh cuộn đè lên nội dung */
+  margin-top: 10px;
+}
+.scrollable-posts {
+  border-top: 1px solid #222;
+  box-shadow: inset 0 5px 5px -5px rgba(0,0,0,0.4);
+}
+/* Đẹp cho thanh cuộn trên Chrome, Edge */
+.scrollable-posts::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-posts::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollable-posts::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.scrollable-posts::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 255, 127, 0.5); /* xanh lá cây neon nhẹ */
+}
+
+/* Firefox */
+.scrollable-posts {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}

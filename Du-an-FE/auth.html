@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập / Đăng ký Blog</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <div class="button-box">
+        <button id="loginToggle" class="toggle-btn active">Đăng nhập</button>
+        <button id="registerToggle" class="toggle-btn">Đăng ký</button>
+      </div>
+
+      <!-- THÊM lớp này -->
+      <div class="form-container">
+        <div class="form-slider">
+          <!-- Login form -->
+          <form id="loginForm" class="form login-form">
+            <h2>Đăng nhập</h2>
+            <input type="email" placeholder="Email" name="email" required>
+            <input type="password" placeholder="Mật khẩu" name="password" required>
+            <button type="submit">Đăng nhập</button>
+          </form>
+
+          <!-- Register form -->
+          <form id="registerForm" class="form register-form">
+            <h2>Đăng ký</h2>
+            <input type="text" placeholder="Tên người dùng" name="username" required>
+            <input type="email" placeholder="Email" name="email" required>
+            <input type="password" placeholder="Mật khẩu" name="password" required>
+            <button type="submit">Đăng ký</button>
+          </form>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

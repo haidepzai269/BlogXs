@@ -1,0 +1,99 @@
+/* Tùy chỉnh input tìm kiếm */
+#searchInput {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+  border-bottom: 2px solid #555;
+  background-color: #111;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #1da1f2;
+  box-shadow: 0 0 8px rgba(29, 161, 242, 0.5);
+}
+
+/* Animation cho placeholder */
+/* ------------- Hiệu ứng placeholder chuyển động ------------- */
+@keyframes slidePlaceholder {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0); /* Dừng ở trái */
+  }
+  40% {
+    opacity: 0;
+    transform: translateX(100%); /* Trượt sang phải và mờ dần */
+  }
+  60% {
+    opacity: 0;
+    transform: translateX(0); /* Nhảy về trái, vẫn ẩn */
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0); /* Hiện lại ở trái */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0); /* Chuẩn bị lặp */
+  }
+}
+
+
+#searchInput::placeholder {
+  transition: all 0.3s ease-in-out;
+  color: #ccc;
+}
+
+/* ------------- Hiệu ứng nhấp gợn sóng khi click vào input ------------- */
+.ripple-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+  z-index: 100;
+}
+
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+/* Placeholder giả để animation hoạt động liên tục */
+.animated-placeholder {
+  position: absolute;
+  left: 12px;
+  top: 20%;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+  animation: slidePlaceholder 8s ease-in-out infinite;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+
+/* Ẩn placeholder nếu có focus hoặc có chữ */
+#searchInput:focus + .animated-placeholder,
+#searchInput:not(:placeholder-shown):not(:focus):valid + .animated-placeholder {
+  display: none;
+}

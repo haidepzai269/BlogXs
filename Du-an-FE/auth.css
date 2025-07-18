@@ -1,0 +1,108 @@
+/* Reset & layout */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .container {
+    width: 400px;
+    position: relative;
+  }
+  
+  .form-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffff33;
+    padding: 20px 25px;
+    position: relative;
+    backdrop-filter: blur(10px);
+    overflow: hidden; /* CHỈ hiển thị phần trong khung */
+  }
+  
+  .button-box {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #00ffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .toggle-btn.active {
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+  }
+  
+  /* VÙNG CHUYỂN FORM */
+  .form-container {
+    width: 100%;
+    height: 290px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .form-slider {
+    width: 200%;
+    display: flex;
+    transition: transform 0.6s ease-in-out;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+  }
+  
+  /* Mỗi form chiếm 50% */
+  .form {
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    transition: opacity 0.5s ease;
+  }
+  
+  input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: #ffffff22;
+    color: white;
+  }
+  
+  button[type="submit"] {
+    padding: 10px;
+    background: #00ffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: transform 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ffff;
+  }
+  
+  h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  

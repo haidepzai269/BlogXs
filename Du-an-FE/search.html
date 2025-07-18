@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tìm kiếm bài viết</title>
+    <link rel="stylesheet" href="search.css" />
+  <link rel="stylesheet" href="home.css" />
+
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <button title="Trang chủ" onclick="window.location.href='home.html'"><i class="ph ph-house"></i></button>
+      <button title="Tìm kiếm" class="active"><i class="ph ph-magnifying-glass"></i></button>
+      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus"></i></button>
+      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user"></i></button>
+      <button title="Đã thích " id="heartBtn"><i class="ph ph-thumbs-up"></i></button>
+      <div class="menu-bottom">
+        <button title="Menu" id="menuToggle"><i class="ph ph-list"></i></button>
+        <div class="menu-popup" id="menuPopup">
+          <!-- Các nút sẽ được JS thêm vào -->
+        </div>
+      </div>
+      <div class="logout-button">
+        <button title="Đăng xuất" onclick="logout()">⏻</button>
+      </div>
+    </nav>
+
+    <main class="content">
+      <h1>🔍 Tìm kiếm bài viết</h1>
+      <div class="ripple-container">
+        <input type="text" id="searchInput" placeholder=" " />
+        <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
+      </div>           
+      <div id="postsContainer" class="posts"></div>
+    </main>
+  </div>
+  <div class="overlay" id="menuOverlay"></div>
+  <script src="authFetch.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>
