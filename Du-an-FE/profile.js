@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const data = await res.json();
       if (res.ok) {
-        avatarImage.style.backgroundImage = `url('${data.avatar_url}')`;
+        avatarImage.style.backgroundImage = `url('https://blogx-gi3y.onrender.com/uploads/${data.avatar_url}')`;
       } else {
         console.error(data.error);
         alert("❌ Không thể cập nhật ảnh đại diện");
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const data = await res.json();
       if (res.ok) {
-        bannerImage.style.backgroundImage = `url('${data.cover_url}')`;
+        bannerImage.style.backgroundImage = `url('https://blogx-gi3y.onrender.com/uploads/${data.cover_url}')`;
       } else {
         console.error(data.error);
         alert("❌ Không thể cập nhật ảnh bìa");
