@@ -23,7 +23,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   const password = e.target.password.value.trim();
 
   try {
-    const res = await fetch('http://localhost:3000/api/auth/register', {
+    const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -49,7 +49,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const password = e.target.password.value.trim();
 
   try {
-    const res = await fetch('http://localhost:3000/api/auth/login', {
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
