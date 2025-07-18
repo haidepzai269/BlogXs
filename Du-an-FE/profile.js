@@ -30,32 +30,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Khi chọn ảnh avatar
-  avatarInput.addEventListener("change", () => {
+  avatarInput.addEventListener("change", async () => {
     const file = avatarInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        avatarImage.style.backgroundImage = `url('${dataUrl}')`;
-        localStorage.setItem("avatarImage", dataUrl);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("avatar", file);
+  
+    try {
+      const res = await authFetch("/api/profile/avatar", {
+        method: "PATCH",
+        body: formData,
+      });
+  
+      const data = await res.json();
+      if (res.ok) {
+        avatarImage.style.backgroundImage = `url('${data.avatar_url}')`;
+      } else {
+        console.error(data.error);
+        alert("❌ Không thể cập nhật ảnh đại diện");
+      }
+    } catch (err) {
+      console.error("❌ Lỗi upload ảnh đại diện:", err);
     }
   });
-
-  // Khi chọn ảnh bìa
-  coverInput.addEventListener("change", () => {
+  
+  coverInput.addEventListener("change", async () => {
     const file = coverInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        bannerImage.style.backgroundImage = `url('${dataUrl}')`;
-        localStorage.setItem("coverImage", dataUrl);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("cover", file);
+  
+    try {
+      const res = await authFetch("/api/profile/cover", {
+        method: "PATCH",
+        body: formData,
+      });
+  
+      const data = await res.json();
+      if (res.ok) {
+        bannerImage.style.backgroundImage = `url('${data.cover_url}')`;
+      } else {
+        console.error(data.error);
+        alert("❌ Không thể cập nhật ảnh bìa");
+      }
+    } catch (err) {
+      console.error("❌ Lỗi upload ảnh bìa:", err);
     }
   });
+  
 
   // Hiệu ứng xem avatar
   avatarImage.addEventListener("mouseenter", () => {

@@ -50,26 +50,38 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// 📁 controllers/profile.controller.js
 exports.updateAvatar = async (req, res) => {
   const userId = req.user.id;
   const avatarPath = `/uploads/${req.file.filename}`;
 
   try {
+    // Cập nhật bảng users
     await pool.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [avatarPath, userId]);
+
+    // Thêm vào bảng images
+    await pool.query(
+      'INSERT INTO images (user_id, type, url) VALUES ($1, $2, $3)',
+      [userId, 'avatar', avatarPath]
+    );
+
     res.json({ message: 'Avatar updated successfully', avatar_url: avatarPath });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
-
 exports.updateCover = async (req, res) => {
   const userId = req.user.id;
   const coverPath = `/uploads/${req.file.filename}`;
 
   try {
     await pool.query('UPDATE users SET cover_url = $1 WHERE id = $2', [coverPath, userId]);
+
+    await pool.query(
+      'INSERT INTO images (user_id, type, url) VALUES ($1, $2, $3)',
+      [userId, 'cover', coverPath]
+    );
+
     res.json({ message: 'Cover updated successfully', cover_url: coverPath });
   } catch (error) {
     console.error(error);

@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 // ✅ Phục vụ ảnh tĩnh từ uploads (đưa thư mục này vào Du-an-BE)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/profile', profileRoutes);
