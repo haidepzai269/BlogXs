@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         postEl.className = "post";
         postEl.innerHTML = `
           <button class="delete-post-btn" data-id="${post.id}">🗑 Xoá</button>
-          <p><strong>${post.username}</strong></p>
+          <p class="users"><strong>${post.username}</strong></p>
           <p>${post.content}</p>
           <p><small>${new Date(post.created_at).toLocaleString()}</small></p>
 
