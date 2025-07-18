@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
   
         try {
-          const res = await authFetch('http://localhost:3000/api/posts', {
+          const res = await authFetch('/api/posts', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
