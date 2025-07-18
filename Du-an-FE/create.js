@@ -45,6 +45,9 @@ function goToSearch() {
 function goToProfile() {
     window.location.href = 'profile.html';
   }
+  function goToLike() {
+    window.location.href = 'like.html';
+  }
 function logout() {
     localStorage.clear();
     window.location.href = 'auth.html';
