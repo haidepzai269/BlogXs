@@ -18,7 +18,11 @@ app.use(cookieParser());
 
 // ✅ Phục vụ frontend (nếu cần)
 app.use(express.static(path.join(__dirname, './Du-an-FE')));
-
+// Khi vào trang gốc "/", trả về file auth.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './Du-an-FE/auth.html'));
+  });
+  
 // ✅ Phục vụ ảnh tĩnh từ uploads (đưa thư mục này vào Du-an-BE)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
