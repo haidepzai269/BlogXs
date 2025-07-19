@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const coverData = localStorage.getItem("coverImage");
 
   if (avatarData) {
-    avatarImage.style.backgroundImage = `url('${avatarData}')`;
+    document.getElementById("avatarImg").src = avatarData;
   }
 
   if (coverData) {
-    bannerImage.style.backgroundImage = `url('${coverData}')`;
+    document.getElementById("bannerImg").src = coverData;
   }
 
   // Khi chọn ảnh avatar
@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const data = await res.json();
       if (res.ok) {
-        avatarImage.style.backgroundImage = `url('https://blogx-gi3y.onrender.com/uploads/${data.avatar_url}')`;
+        document.getElementById("avatarImg").src = data.avatar_url;
+        localStorage.setItem("avatarImage", data.avatar_url);
       } else {
         console.error(data.error);
         alert("❌ Không thể cập nhật ảnh đại diện");
@@ -70,7 +71,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const data = await res.json();
       if (res.ok) {
-        bannerImage.style.backgroundImage = `url('https://blogx-gi3y.onrender.com/uploads/${data.cover_url}')`;
+        document.getElementById("bannerImg").src = data.cover_url;
+        localStorage.setItem("coverImage", data.cover_url);
       } else {
         console.error(data.error);
         alert("❌ Không thể cập nhật ảnh bìa");

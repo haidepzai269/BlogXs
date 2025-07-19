@@ -51,40 +51,41 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.updateAvatar = async (req, res) => {
-  const userId = req.user.id;
-  const avatarPath = `/uploads/${req.file.filename}`;
-
   try {
-    // Cập nhật bảng users
-    await pool.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [avatarPath, userId]);
+    const avatarUrl = req.file.path; // Cloudinary trả về đường dẫn URL
+    const userId = req.user.id;
 
-    // Thêm vào bảng images
     await pool.query(
-      'INSERT INTO images (user_id, type, url) VALUES ($1, $2, $3)',
-      [userId, 'avatar', avatarPath]
+      'UPDATE users SET avatar_url = $1 WHERE id = $2',
+      [avatarUrl, userId]
     );
 
-    res.json({ message: 'Avatar updated successfully', avatar_url: avatarPath });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.json({ message: 'Cập nhật ảnh đại diện thành công', avatarUrl });
+  } catch (err) {
+    console.error('Lỗi cập nhật avatar:', err);
+    res.status(500).json({ message: 'Lỗi server khi cập nhật avatar' });
   }
 };
 exports.updateCover = async (req, res) => {
-  const userId = req.user.id;
-  const coverPath = `/uploads/${req.file.filename}`;
-
   try {
-    await pool.query('UPDATE users SET cover_url = $1 WHERE id = $2', [coverPath, userId]);
+    const coverUrl = req.file.path; // Cloudinary trả về URL đầy đủ
+    const userId = req.user.id;
 
+    // Cập nhật cover_url vào bảng users
     await pool.query(
-      'INSERT INTO images (user_id, type, url) VALUES ($1, $2, $3)',
-      [userId, 'cover', coverPath]
+      'UPDATE users SET cover_url = $1 WHERE id = $2',
+      [coverUrl, userId]
     );
 
-    res.json({ message: 'Cover updated successfully', cover_url: coverPath });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    // Lưu vào bảng images nếu cần
+    await pool.query(
+      'INSERT INTO images (user_id, type, url) VALUES ($1, $2, $3)',
+      [userId, 'cover', coverUrl]
+    );
+
+    res.json({ message: 'Cập nhật ảnh bìa thành công', coverUrl });
+  } catch (err) {
+    console.error('Lỗi cập nhật cover:', err);
+    res.status(500).json({ message: 'Lỗi server khi cập nhật ảnh bìa' });
   }
 };
