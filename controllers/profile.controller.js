@@ -12,7 +12,7 @@ exports.getProfile = async (req, res) => {
     console.error('Lỗi khi lấy profile:', err);
     res.sendStatus(500);
   }
-};s
+};
 
 exports.updateProfile = async (req, res) => {
   try {
