@@ -7,6 +7,8 @@ const postRoutes = require('./routes/post.routes');
 const profileRoutes = require('./routes/profile.routes');
 const userRoutes = require('./routes/users.routes');
 const likeRoutes = require('./routes/likes.routes');
+const userHoverRoutes = require('./routes/users.routes');
+
 
 
 
@@ -34,5 +36,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/user', userRoutes); // <- Cẩn thận trùng lặp
 app.use('/api', likeRoutes);
 app.use('/api/profile', require('./routes/profile.routes'));
+app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muốn tách biệt
 
 module.exports = app;

@@ -97,3 +97,18 @@
 #searchInput:not(:placeholder-shown):not(:focus):valid + .animated-placeholder {
   display: none;
 }
+
+
+h3{
+  color: #1da1f2;
+  margin-bottom: 12px;
+}
+
+.contents{
+  margin-bottom: 10px;
+}
+
+small{
+  color: #555;
+}
+

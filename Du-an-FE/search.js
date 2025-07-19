@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         postEl.className = 'post';
         postEl.innerHTML = `
           <h3>@${post.username}</h3>
-          <p>${post.content}</p>
+          <p class="contents">${post.content}</p>
           <small>${new Date(post.created_at).toLocaleString()}</small>
         `;
         postsContainer.appendChild(postEl);

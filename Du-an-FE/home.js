@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const menuToggle = document.getElementById('menuToggle');
   const menuPopup = document.getElementById('menuPopup');
   const overlay = document.getElementById('menuOverlay');
+  const popup = document.getElementById('userPopup');
 
   if (!postsContainer) {
     console.error('❌ Không tìm thấy phần tử #postsContainer');
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const liked = likedPostIds.includes(post.id);
       const postEl = document.createElement('div');
       postEl.className = 'post';
-
+    
       postEl.innerHTML = `
         <span class="username">@${post.username}</span>
         <p class="content-text">${post.content}</p>
@@ -41,28 +42,83 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="time">${new Date(post.created_at).toLocaleString()}</span>
         </div>
       `;
-
       const likeBtn = postEl.querySelector('.like-btn');
 
-      likeBtn.addEventListener('click', async () => {
-        const isLiked = likeBtn.classList.contains('liked');
-        const url = `/api/posts/${post.id}/${isLiked ? 'unlike' : 'like'}`;
-        const method = isLiked ? 'DELETE' : 'POST';
+      likeBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const btn = e.currentTarget;
+        const postId = btn.dataset.postId;
+        const liked = btn.classList.contains('liked');
+      
+        try {
+          if (liked) {
+            const res = await authFetch(`/api/posts/${postId}/like`, {
+              method: 'DELETE',
+            });
+      
+            if (!res.ok) throw new Error('Không unlike được');
+      
+            btn.classList.remove('liked');
+            btn.textContent = '🤍';
+          } else {
+            const res = await authFetch(`/api/posts/${postId}/like`, {
+              method: 'POST',
+            });
+      
+            if (!res.ok) throw new Error('Không like được');
+      
+            btn.classList.add('liked');
+            btn.textContent = '❤️';
+          }
+        } catch (err) {
+          console.error('❌ Lỗi khi like/unlike:', err.message);
+          alert('Không thể thực hiện hành động. Vui lòng thử lại!');
+        }
+      });
+      
+      const usernameSpan = postEl.querySelector('.username');
+
+      // Sự kiện click để hiện popup
+      usernameSpan.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const username = post.username;
 
         try {
-          const res = await authFetch(url, { method });
-          if (!res.ok) throw new Error('Like/bỏ like thất bại');
+          const res = await authFetch(`/api/users/hover/${username}`);
+          if (!res.ok) throw new Error('Không lấy được thông tin người dùng');
+          const data = await res.json();
 
-          // Cập nhật giao diện
-          likeBtn.classList.toggle('liked');
-          likeBtn.textContent = isLiked ? '🤍' : '❤️';
+          popup.innerHTML = `
+            <div class="cover" style="background-image: url('${data.cover_url || ''}')"></div>
+            <img class="avatar" src="${data.avatar_url || ''}" />
+            <div class="username">@${data.username}</div>
+            <div style="margin: 0 10px 10px; color: #ccc; font-size: 13px;">
+              đã tham gia BlogXs vào ${new Date(data.created_at).toLocaleDateString('vi-VN')}
+            </div>
+          `;
+
+          const rect = usernameSpan.getBoundingClientRect();
+          popup.style.top = `${window.scrollY + rect.bottom + 8}px`;
+          popup.style.left = `${window.scrollX + rect.left}px`;
+          popup.style.display = 'block';
         } catch (err) {
-          console.error('❌ Lỗi khi like:', err.message);
+          console.error('❌ Lỗi popup:', err.message);
         }
       });
 
       postsContainer.appendChild(postEl);
     });
+
+    // Ẩn popup khi click ra ngoài (đặt ngoài vòng forEach)
+    document.addEventListener('click', (e) => {
+      if (
+        !e.target.closest('.user-popup') &&
+        !e.target.classList.contains('username')
+      ) {
+        popup.style.display = 'none';
+      }
+    });
+
   } catch (err) {
     postsContainer.innerHTML = `<p style="color:red;">${err.message}</p>`;
     console.error('❌ Lỗi hiển thị bài đăng:', err.message);
