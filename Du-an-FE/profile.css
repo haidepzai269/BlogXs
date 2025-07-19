@@ -125,10 +125,12 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
     margin-top: 40px;
+    transition: 0.2s;
   }
   
   .edit-btn:hover {
     background-color: rgba(29, 161, 242, 0.1);
+    scale: calc(1.07);
   }
   
   .name {
