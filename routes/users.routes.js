@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth'); // ✅ Đúng
 const userController = require('../controllers/user.controller');
 
 // Lấy thông tin tài khoản đang đăng nhập

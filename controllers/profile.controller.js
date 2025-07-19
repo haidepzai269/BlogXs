@@ -1,6 +1,6 @@
 // controllers/profile.controller.js
 const pool = require('../db');
-const authenticate = require('../middleware/authenticate');
+const authenticateToken = require('../middleware/auth');
 
 exports.getProfile = async (req, res) => {
   try {

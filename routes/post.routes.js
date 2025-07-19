@@ -1,16 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/post.controller');
-const verifyToken = require('../middleware/auth');
+
+// 👇 Destructure đúng middleware cần dùng
+const { authenticateToken } = require('../middleware/auth');
 
 router.get('/', postController.getAllPosts);
-router.get('/search', verifyToken, postController.searchPosts);
+router.get('/search', authenticateToken, postController.searchPosts);
 
-// ✅ Thêm route lấy bài viết user hiện tại
-router.get('/me', verifyToken, postController.getPostsByCurrentUser);
-// ✅ Route tạo bài viết mới
-router.post('/', verifyToken, postController.createPost);
-router.delete('/:id', verifyToken, postController.deletePost);
+// ✅ Lấy bài viết user hiện tại
+router.get('/me', authenticateToken, postController.getPostsByCurrentUser);
 
+// ✅ Tạo bài viết mới
+router.post('/', authenticateToken, postController.createPost);
+
+// ✅ Xóa bài viết
+router.delete('/:id', authenticateToken, postController.deletePost);
 
 module.exports = router;
