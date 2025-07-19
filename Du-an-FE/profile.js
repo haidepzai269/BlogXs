@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!file) return;
   
     const formData = new FormData();
-    formData.append("avatar", file);
+    formData.append("avatar", file); // ⚠️ Phải trùng với multer.single("avatar")
   
     try {
       const res = await authFetch("/api/profile/avatar", {
@@ -43,18 +43,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         body: formData,
       });
   
-      const data = await res.json();
+      const data = await res.json(); // Nếu backend trả lỗi HTML thì chỗ này sẽ lỗi
+  
       if (res.ok) {
-        document.getElementById("avatarImg").src = data.avatar_url;
-        localStorage.setItem("avatarImage", data.avatar_url);
+        avatarImg.src = data.avatarUrl;
       } else {
-        console.error(data.error);
-        alert("❌ Không thể cập nhật ảnh đại diện");
+        console.error("❌ Cập nhật thất bại", data.message);
       }
     } catch (err) {
       console.error("❌ Lỗi upload ảnh đại diện:", err);
     }
   });
+  
   
   coverInput.addEventListener("change", async () => {
     const file = coverInput.files[0];
