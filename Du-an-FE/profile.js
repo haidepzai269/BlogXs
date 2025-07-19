@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     try {
       const res = await authFetch("/api/profile/avatar", {
-        method: "PATCH",
+        method: "PUT",
         body: formData,
       });
   
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     try {
       const res = await authFetch("/api/profile/cover", {
-        method: "PATCH",
+        method: "PUT",
         body: formData,
       });
   

@@ -13,9 +13,9 @@ router.get('/', authenticateToken, profileController.getProfile);
 router.put('/', authenticateToken, profileController.updateProfile);
 
 // Upload avatar
+// Cập nhật avatar
 router.put('/avatar', authenticateToken, upload.single('avatar'), profileController.updateAvatar);
 
-// Upload cover
-router.patch('/cover', authenticateToken, upload.single('cover'), profileController.updateCover);
-
+// Cập nhật cover
+router.put('/cover', authenticateToken, upload.single('cover'), profileController.updateCover);
 module.exports = router;

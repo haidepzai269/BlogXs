@@ -33,5 +33,6 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/user', userRoutes); // <- Cẩn thận trùng lặp
 app.use('/api', likeRoutes);
+app.use('/api/profile', require('./routes/profile.routes'));
 
 module.exports = app;
