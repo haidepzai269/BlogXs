@@ -6,6 +6,7 @@ const authenticateToken = require('../middleware/auth');
 const upload = require('../middleware/upload.middleware');
 const profileController = require('../controllers/profile.controller');
 const verifyToken = require('../middleware/auth.js'); // hoặc đúng đường dẫn file của bạn
+const authenticate = require('../middleware/authenticate'); // 🛠 Thêm dòng này
 
 
 // Lấy profile
