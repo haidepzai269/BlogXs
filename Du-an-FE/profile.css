@@ -12,15 +12,105 @@
   }
   
   .avatar {
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: #0f0f0f;
     border: 4px solid black;
     position: absolute;
-    top: 100px;
-    left: 20px;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
   }
+  
+  #avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .profile-top {
+    display: flex;
+    align-items: center;
+    margin-top: -40px;
+    margin-left: 20px;
+    gap: 20px;
+  }
+  
+  .profile-info .name {
+    margin-top: 110px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1da1f2;
+  }
+  
+  .profile-info .username {
+    color: #aaa;
+    font-size: 14px;
+  }
+  
+  /* Căn avatar trái thay vì giữa */
+  .avatar {
+    left: 0;
+    top: 140px;
+    transform: none;
+    margin-left: 20px;
+  }
+  
+  /* Hover avatar phóng to mượt */
+  #avatarImg {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  
+  .avatar:hover #avatarImg {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+  
+  .avatar:hover #avatarImg {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+  
+  .avatar-fullscreen {
+    position: fixed;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    z-index: 9999;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  
+  .avatar-fullscreen.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .avatar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .avatar:hover::after {
+    opacity: 1;
+  }
+  
+
   
   .edit-btn {
     position: absolute;
@@ -34,6 +124,7 @@
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    margin-top: 40px;
   }
   
   .edit-btn:hover {
@@ -41,7 +132,7 @@
   }
   
   .name {
-    margin-top: 50px;
+    margin-top: 78px;
     font-size: 20px;
     font-weight: bold;
     color: #1da1f2;

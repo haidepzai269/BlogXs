@@ -74,17 +74,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   
 
   // Hiệu ứng xem avatar
-  avatarImage.addEventListener("mouseenter", () => {
-    const bg = avatarImage.style.backgroundImage;
-    if (bg) {
-      avatarFullscreen.style.backgroundImage = bg;
-      avatarFullscreen.classList.add("active");
-    }
-  });
 
-  avatarImage.addEventListener("mouseleave", () => {
-    avatarFullscreen.classList.remove("active");
-  });
+
+
   const fetchProfile = async () => {
     try {
       const res = await authFetch("/api/user/profile");
@@ -272,4 +264,19 @@ document.addEventListener('DOMContentLoaded', () => {
     menuPopup.style.display = 'none';
     overlay.style.display = 'none';
   });
+});
+
+
+//Hiệu ứng ảnh 
+const avatarImg = document.getElementById("avatarImg");
+
+// Hover avatar → hiện ảnh lớn
+avatarImage.addEventListener("mouseenter", () => {
+  avatarFullscreen.style.backgroundImage = `url(${avatarImg.src})`;
+  avatarFullscreen.classList.add("active");
+});
+
+// Rời chuột khỏi avatar → ẩn ảnh lớn
+avatarImage.addEventListener("mouseleave", () => {
+  avatarFullscreen.classList.remove("active");
 });
