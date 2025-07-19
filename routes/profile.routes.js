@@ -19,7 +19,7 @@ router.put('/', authenticateToken, profileController.updateProfile);
 
   
   // ✅ Gọi controller thay vì viết trực tiếp ở đây
-  router.put('/profile/avatar', authenticate, upload.single('avatar'), updateAvatar);
+  router.put('/profile/avatar', authenticate, upload.single('avatar'), profileController.updateAvatar);
   router.patch('/cover', verifyToken, upload.single('cover'), profileController.updateCover);
   
 module.exports = router;
