@@ -117,8 +117,8 @@
     top: 170px;
     right: 20px;
     background: transparent;
-    color: #1da1f2;
-    border: 1px solid #1da1f2;
+    color: #ffffff;
+    border: 1px solid #ffffff;
     border-radius: 20px;
     padding: 5px 15px;
     font-size: 14px;
@@ -131,6 +131,7 @@
   .edit-btn:hover {
     background-color: rgba(29, 161, 242, 0.1);
     scale: calc(1.07);
+    border: 1px solid #1da1f2;
   }
   
   .name {
