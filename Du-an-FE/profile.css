@@ -129,6 +129,7 @@
   }
   
   .edit-btn:hover {
+    color:#1da1f2;
     background-color: rgba(29, 161, 242, 0.1);
     scale: calc(1.07);
     border: 1px solid #1da1f2;
