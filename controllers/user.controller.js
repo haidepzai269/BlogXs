@@ -6,18 +6,19 @@ exports.getProfile = async (req, res) => {
   const userId = req.user.id;
   try {
     const result = await pool.query(
-      'SELECT id, username, email FROM users WHERE id = $1',
+      'SELECT id, username, email, avatar_url, cover_url FROM users WHERE id = $1',
       [userId]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Người dùng không tồn tại' });
     }
-    res.json(result.rows[0]);
+    res.json(result.rows[0]); // ✅ Bây giờ trả về thêm avatar_url và cover_url
   } catch (error) {
     console.error('Lỗi lấy thông tin người dùng:', error);
     res.status(500).json({ message: 'Lỗi server' });
   }
 };
+
 
 // Cập nhật profile
 exports.updateProfile = async (req, res) => {

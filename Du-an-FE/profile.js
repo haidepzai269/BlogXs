@@ -17,17 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   formSection.style.display = "none";
 
-  // Lấy ảnh từ localStorage khi trang load
-  const avatarData = localStorage.getItem("avatarImage");
-  const coverData = localStorage.getItem("coverImage");
 
-  if (avatarData) {
-    document.getElementById("avatarImg").src = avatarData;
-  }
-
-  if (coverData) {
-    document.getElementById("bannerImg").src = coverData;
-  }
 
   // Khi chọn ảnh avatar
   avatarInput.addEventListener("change", async () => {
@@ -95,22 +85,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   avatarImage.addEventListener("mouseleave", () => {
     avatarFullscreen.classList.remove("active");
   });
-
   const fetchProfile = async () => {
     try {
       const res = await authFetch("/api/user/profile");
       if (!res.ok) throw new Error("Lỗi lấy thông tin người dùng");
-      const data = await res.json();
-
+  
+      const data = await res.json(); // 👉 Phải lấy JSON trước mới dùng
+  
       usernameInput.value = data.username || "";
       emailInput.value = data.email || "";
-
+  
       document.querySelector(".name").textContent = data.username;
       document.querySelector(".username").textContent = `@${data.username.toLowerCase()}`;
+  
+      if (data.avatar_url) {
+        document.getElementById("avatarImg").src = data.avatar_url;
+      }
+  
+      if (data.cover_url) {
+        document.getElementById("bannerImg").src = data.cover_url;
+      }
+  
     } catch (err) {
       console.error("❌ Lỗi lấy thông tin người dùng:", err);
     }
   };
+  
 
   const fetchUserPosts = async () => {
     try {
