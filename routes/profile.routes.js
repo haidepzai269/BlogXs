@@ -2,12 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
-const authenticateToken = require('../middleware/auth');
+const authenticateToken = require('../middleware/auth'); // Gộp vào đây
 const upload = require('../middleware/upload.middleware');
 const profileController = require('../controllers/profile.controller');
-const verifyToken = require('../middleware/auth.js'); // hoặc đúng đường dẫn file của bạn
-const authenticate = require('../middleware/authenticate'); // 🛠 Thêm dòng này
-
 
 // Lấy profile
 router.get('/', authenticateToken, profileController.getProfile);
@@ -16,10 +13,9 @@ router.get('/', authenticateToken, profileController.getProfile);
 router.put('/', authenticateToken, profileController.updateProfile);
 
 // ✅ Upload ảnh đại diện (1 ảnh)
+router.put('/profile/avatar', authenticateToken, upload.single('avatar'), profileController.updateAvatar);
 
-  
-  // ✅ Gọi controller thay vì viết trực tiếp ở đây
-  router.put('/profile/avatar', authenticate, upload.single('avatar'), profileController.updateAvatar);
-  router.patch('/cover', verifyToken, upload.single('cover'), profileController.updateCover);
-  
+// ✅ Upload ảnh cover
+router.patch('/cover', authenticateToken, upload.single('cover'), profileController.updateCover);
+
 module.exports = router;
