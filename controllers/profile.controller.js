@@ -84,7 +84,7 @@ exports.updateCover = async (req, res) => {
       [userId, 'cover', coverUrl]
     );
 
-    res.json({ message: 'Cập nhật ảnh bìa thành công', coverUrl });
+    res.json({ message: 'Cập nhật ảnh bìa thành công', cover_url: coverUrl });
   } catch (err) {
     console.error('Lỗi cập nhật cover:', err);
     res.status(500).json({ message: 'Lỗi server khi cập nhật ảnh bìa' });
