@@ -196,3 +196,128 @@ function generateSkeletons(count) {
   }
   return skeletons;
 }
+
+
+
+function updateTime() {
+  const now = new Date();
+  const formatted = now.toLocaleString("vi-VN", {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+  document.getElementById("currentTime").textContent = formatted;
+}
+
+// Gọi mỗi giây
+setInterval(updateTime, 1000);
+updateTime(); // Gọi lần đầu để hiển thị ngay
+
+
+// Css
+function getCurrentHour() {
+  return new Date().getHours();
+}
+
+function startGradientEffect() {
+  const canvas = document.getElementById('backgroundEffect');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let hue = 0;
+
+  function drawGradient() {
+    hue += 0.2;
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, `hsl(${hue}, 70%, 15%)`);
+    gradient.addColorStop(1, `hsl(${(hue + 60) % 360}, 70%, 10%)`);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(drawGradient);
+  }
+
+  drawGradient();
+}
+
+function startFogEffect() {
+  const canvas = document.getElementById('backgroundEffect');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const fogs = Array.from({ length: 20 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 100 + 80,
+    speed: Math.random() * 0.5 + 0.1,
+    alpha: Math.random() * 0.1 + 0.03
+  }));
+
+  function drawFog() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fogs.forEach(fog => {
+      ctx.beginPath();
+      ctx.arc(fog.x, fog.y, fog.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${fog.alpha})`;
+      ctx.fill();
+      fog.x += fog.speed;
+      if (fog.x - fog.radius > canvas.width) {
+        fog.x = -fog.radius;
+        fog.y = Math.random() * canvas.height;
+      }
+    });
+    requestAnimationFrame(drawFog);
+  }
+
+  drawFog();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const hour = new Date().getHours();
+  const audio = document.getElementById("backgroundMusic");
+
+  // Gán src nhạc theo giờ
+  if (hour >= 6 && hour < 18) {
+    audio.src = "/audio/day.mp3";
+  } else {
+    audio.src = "/audio/night.mp3";
+  }
+
+  audio.load();
+
+  // Phát nhạc khi click đầu tiên
+  document.body.addEventListener("click", () => {
+    if (audio.src) {
+      audio.volume = 0.3;
+      audio.play().catch(err => console.log("Phát nhạc bị chặn:", err));
+    }
+  }, { once: true });
+
+  // Toggle button
+  const toggleBtn = document.getElementById("toggleMusicBtn");
+  toggleBtn.addEventListener("click", () => {
+    if (!audio.src) {
+      console.warn("Không có file âm thanh để phát.");
+      return;
+    }
+
+    if (audio.paused) {
+      audio.play();
+      toggleBtn.innerText = "🔊";
+    } else {
+      audio.pause();
+      toggleBtn.innerText = "🔇";
+    }
+  });
+    // 🎨 Hiệu ứng nền theo giờ
+    if (hour >= 6 && hour < 18) {
+      startGradientEffect();
+    } else {
+      startFogEffect();
+    }
+});

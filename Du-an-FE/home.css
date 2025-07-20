@@ -298,3 +298,33 @@ body {
 .username{
   cursor: pointer;
 }
+
+
+
+
+
+.current-time {
+  position: absolute;
+  margin-right: 10px;
+  top: 15px;
+  right: 25px;
+  font-size: 16px;
+  color: #1da1f2;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(29, 161, 242, 0.4);
+  font-weight: bold;
+  z-index: 10;
+}
+
+
+#backgroundEffect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
