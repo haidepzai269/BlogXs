@@ -30,15 +30,53 @@
 
     <main class="content">
       <h1>🔍 Tìm kiếm bài viết</h1>
-      <div class="ripple-container">
+      <div class="ripple-container search-bar">
         <input type="text" id="searchInput" placeholder=" " />
         <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
-      </div>           
+        <i class="ph ph-magnifying-glass search-icon"></i>
+      </div>                
       <div id="postsContainer" class="posts"></div>
     </main>
   </div>
+  <canvas id="backgroundEffect"></canvas>
+  <iframe src="/player.html" id="musicFrame" style="display: none;"></iframe>
+<button id="toggleMusicBtn" style=" color: #1da1f2;  position: fixed; bottom: 10px; right: 10px; font-size: 24px; margin-right: 20px;border-radius: 12px; cursor: pointer; background-color: rgb(33, 33, 33); border: none;">
+  🔊</button>
   <div class="overlay" id="menuOverlay"></div>
   <script src="authFetch.js"></script>
   <script src="search.js"></script>
+  <script>
+    const btn = document.getElementById("toggleMusicBtn");
+    btn.addEventListener("click", () => {
+      const iframe = document.getElementById("musicFrame");
+      iframe.contentWindow.postMessage("TOGGLE_MUSIC", "*");
+      btn.innerText = btn.innerText === "🔊" ? "🔇" : "🔊";
+    });
+  </script>
+  <!-- Hiệu ứng biểu tượng và fade-in kết quả -->
+<script>
+  // Fade-in cho mỗi bài viết khi được thêm vào DOM
+  function fadeInPosts() {
+    const posts = document.querySelectorAll(".post");
+    posts.forEach((post, index) => {
+      post.style.animationDelay = `${index * 100}ms`;
+      post.classList.add("fade-in");
+    });
+  }
+
+  // Gọi lại sau khi có dữ liệu từ search.js
+  window.fadeInPosts = fadeInPosts;
+</script>
+
+<!-- Hiệu ứng nền gradient động -->
+<style>
+  #backgroundEffect {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+    background-size: 400% 400%;
+    animation: gradientMove 30s ease infinite;
+    opacity: 0.2;
+  }
+</style>
+
 </body>
 </html>

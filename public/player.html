@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Music Player</title>
+</head>
+<body>
+  <audio id="music" autoplay loop></audio>
+
+  <script>
+    const audio = document.getElementById("music");
+    const hour = new Date().getHours();
+    audio.src = hour >= 6 && hour < 18 ? "/audio/day.mp3" : "/audio/night.mp3";
+    audio.volume = 0.4;
+
+    // Tự phát sau tương tác nếu bị chặn
+    window.addEventListener("click", () => audio.play());
+
+    // Lắng nghe toggle từ trang chính
+    window.addEventListener("message", (e) => {
+      if (e.data === "TOGGLE_MUSIC") {
+        if (audio.paused) audio.play();
+        else audio.pause();
+      }
+    });
+  </script>
+</body>
+</html>
