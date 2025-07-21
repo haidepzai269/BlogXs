@@ -1,3 +1,6 @@
+const { indexPostToES, deletePostFromES } = require('../utils/syncElasticsearch');
+const { Client } = require('@elastic/elasticsearch');
+const client = require('../utils/elasticsearchClient');
 const db = require('../db');
 
 // Lấy tất cả bài viết
@@ -11,23 +14,42 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-// Tìm kiếm bài viết
 exports.searchPosts = async (req, res) => {
+  const { q } = req.query;
+
   try {
-    const query = req.query.q;
-    if (!query) return res.status(400).json({ error: 'Thiếu từ khóa tìm kiếm' });
+    const searchQuery = {
+      index: 'posts',
+      body: {
+        query: {
+          multi_match: {
+            query: q,
+            fields: ['content', 'username']
+          }
+        }
+      }
+    };
 
-    const result = await db.query(
-      'SELECT * FROM posts WHERE content ILIKE $1 ORDER BY created_at DESC',
-      [`%${query}%`]
-    );
+    // 🔍 In ra truy vấn gửi lên Elasticsearch
+    console.log('=== Sending ES Search with ===');
+    console.dir(searchQuery, { depth: null });
 
-    res.json(result.rows);
+    const result = await client.search(searchQuery);
+
+    // ✅ In ra kết quả trả về từ Elasticsearch
+    console.log('✅ ES result hits:', result.body.hits.hits);
+
+    const hits = result.body.hits.hits.map(hit => hit._source);
+    res.json(hits);
   } catch (error) {
-    console.error('Lỗi tìm kiếm bài đăng:', error);
-    res.status(500).json({ error: 'Lỗi server khi tìm kiếm' });
+    console.error('❌ Lỗi Elasticsearch:', error.meta?.body?.error || error.message);
+    res.status(500).json({ error: 'Lỗi tìm kiếm bài đăng' });
   }
 };
+
+
+
+
 
 // ✅ Lấy bài viết của user hiện tại
 exports.getPostsByCurrentUser = async (req, res) => {
@@ -48,7 +70,6 @@ exports.getPostsByCurrentUser = async (req, res) => {
   }
 };
 // ✅ Tạo bài viết mới
-// ✅ Tạo bài viết mới
 exports.createPost = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -66,30 +87,46 @@ exports.createPost = async (req, res) => {
       [userId, username, content]
     );
 
+    // ✅ Đồng bộ Elasticsearch nhưng không làm fail nếu lỗi
+    try {
+      await indexPostToES(result.rows[0]);
+    } catch (esError) {
+      console.error('⚠️ Lỗi sync Elasticsearch (create):', esError.message || esError);
+    }
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Lỗi tạo bài viết:', err);
+    console.error('❌ Lỗi tạo bài viết:', err);
     res.status(500).json({ error: 'Lỗi server khi tạo bài viết' });
   }
 };
+
+
 
 exports.deletePost = async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
 
   try {
-    const result = await db.query('DELETE FROM posts WHERE id = $1 AND user_id = $2 RETURNING *', [
-      postId,
-      userId
-    ]);
+    const result = await db.query(
+      'DELETE FROM posts WHERE id = $1 AND user_id = $2 RETURNING *',
+      [postId, userId]
+    );
 
     if (result.rowCount === 0) {
       return res.status(403).json({ error: 'Không được xoá bài viết của người khác' });
     }
 
+    // ✅ Đồng bộ Elasticsearch nhưng không ảnh hưởng nếu lỗi
+    try {
+      await deletePostFromES(postId);
+    } catch (esError) {
+      console.error('⚠️ Lỗi sync Elasticsearch (delete):', esError.message || esError);
+    }
+
     res.json({ message: 'Đã xoá bài viết' });
   } catch (err) {
-    console.error('Lỗi khi xoá bài viết:', err);
+    console.error('❌ Lỗi khi xoá bài viết:', err);
     res.status(500).json({ error: 'Lỗi server khi xoá bài viết' });
   }
 };

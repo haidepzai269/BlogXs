@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('heartBtn').addEventListener('click', () => {
     window.location.href = 'like.html';
   });
+  document.getElementById('profileBtn').addEventListener('click', () => {
+    window.location.href = 'profile.html';
+  });
 
   // Menu & Theme toggle
   const menuToggle = document.getElementById('menuToggle');

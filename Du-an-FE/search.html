@@ -19,7 +19,7 @@
       <button title="Trang chủ" onclick="window.location.href='home.html'"><i class="ph ph-house sidebar-icon"></i></button>
       <button title="Tìm kiếm" class="active"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
       <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus sidebar-icon" ></i></button>
-      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
+      <button title="Hồ sơ cá nhân" id="profileBtn" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
       <button title="Đã thích " id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
       <div class="menu-bottom">
         <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
@@ -34,7 +34,7 @@
 
     <main class="content">
       <h1>🔍 Tìm kiếm bài viết</h1>
-      <div class="ripple-container search-bar">
+      <div class="ripple-container search-bar ">
         <input type="text" id="searchInput" placeholder=" " />
         <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
         <i class="ph ph-magnifying-glass search-icon"></i>

@@ -8,6 +8,8 @@ const profileRoutes = require('./routes/profile.routes');
 const userRoutes = require('./routes/users.routes');
 const likeRoutes = require('./routes/likes.routes');
 const userHoverRoutes = require('./routes/users.routes');
+const searchRoutes = require('./routes/search.routes');
+
 
 
 
@@ -30,6 +32,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/search', searchRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/user', userRoutes); // <- Cẩn thận trùng lặp
@@ -37,22 +40,7 @@ app.use('/api', likeRoutes);
 app.use('/api/profile', require('./routes/profile.routes'));
 app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muốn tách biệt
 
-app.get('/api/theme/:userId', async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const result = await db.query("SELECT theme FROM users WHERE id = ?", [userId]); // với SQLite
-    // hoặc: const result = await pool.query("SELECT theme FROM users WHERE id = $1", [userId]); // PostgreSQL
 
-    if (result.length === 0 || !result[0].theme) {
-      return res.json({ theme: 'dark' }); // fallback nếu không có
-    }
-
-    res.json({ theme: result[0].theme });
-  } catch (err) {
-    console.error('Lỗi khi lấy theme:', err);
-    res.status(500).json({ error: 'Lỗi máy chủ' });
-  }
-});
 
 
 
