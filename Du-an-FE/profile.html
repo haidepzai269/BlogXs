@@ -11,19 +11,19 @@
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button id="homeBtn"><i class="ph ph-house"></i></button>
-      <button id="searchBtn"><i class="ph ph-magnifying-glass"></i></button>
-      <button id="createBtn"><i class="ph ph-plus"></i></button>
-      <button class="active"><i class="ph ph-user"></i></button>
-      <button id="heartBtn"><i class="ph ph-thumbs-up"></i></button>
+      <button id="homeBtn"><i class="ph ph-house sidebar-icon"></i></button>
+      <button id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button id="createBtn"><i class="ph ph-plus sidebar-icon"></i></button>
+      <button class="active"><i class="ph ph-user sidebar-icon"></i></button>
+      <button id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
       <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list"></i></button>
+        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
         <div class="menu-popup" id="menuPopup">
           <!-- Các nút sẽ được JS thêm vào -->
         </div>
       </div>
       <div class="logout-button">
-        <button onclick="logout()">⏻</button>
+        <button class="sidebar-icon"  onclick="logout()">⏻</button>
       </div>
     </nav>
 
@@ -94,5 +94,9 @@
   <div class="overlay" id="menuOverlay"></div>
   <script src="authFetch.js"></script>
   <script src="profile.js"></script>
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body?.setAttribute('data-theme', savedTheme);
+  </script>
 </body>
 </html>

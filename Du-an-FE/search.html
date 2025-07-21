@@ -6,25 +6,29 @@
   <title>Tìm kiếm bài viết</title>
     <link rel="stylesheet" href="search.css" />
   <link rel="stylesheet" href="home.css" />
-
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body?.setAttribute('data-theme', savedTheme);
+  </script>
+  
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button title="Trang chủ" onclick="window.location.href='home.html'"><i class="ph ph-house"></i></button>
-      <button title="Tìm kiếm" class="active"><i class="ph ph-magnifying-glass"></i></button>
-      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus"></i></button>
-      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user"></i></button>
-      <button title="Đã thích " id="heartBtn"><i class="ph ph-thumbs-up"></i></button>
+      <button title="Trang chủ" onclick="window.location.href='home.html'"><i class="ph ph-house sidebar-icon"></i></button>
+      <button title="Tìm kiếm" class="active"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus sidebar-icon" ></i></button>
+      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
+      <button title="Đã thích " id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
       <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list"></i></button>
+        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
         <div class="menu-popup" id="menuPopup">
           <!-- Các nút sẽ được JS thêm vào -->
         </div>
       </div>
       <div class="logout-button">
-        <button title="Đăng xuất" onclick="logout()">⏻</button>
+        <button title="Đăng xuất" class="sidebar-icon" onclick="logout()">⏻</button>
       </div>
     </nav>
 
@@ -69,14 +73,7 @@
 </script>
 
 <!-- Hiệu ứng nền gradient động -->
-<style>
-  #backgroundEffect {
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-    background-size: 400% 400%;
-    animation: gradientMove 30s ease infinite;
-    opacity: 0.2;
-  }
-</style>
+
 
 </body>
 </html>

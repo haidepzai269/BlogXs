@@ -1,4 +1,19 @@
+function applyTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  if (themeToggleBtn) {
+    themeToggleBtn.textContent = theme === 'light' ? '🌑' : '🌕';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Áp dụng theme khi trang load
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  applyTheme(savedTheme);
+
+  // Setup các DOM khác
   const searchInput = document.getElementById('searchInput');
   const postsContainer = document.getElementById('postsContainer');
 
@@ -23,48 +38,38 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         postsContainer.appendChild(postEl);
       });
+
+      window.fadeInPosts?.();
     } catch (err) {
       console.error('❌ Lỗi:', err.message);
     }
   });
-});
-function goToProfile() {
-  window.location.href = 'profile.html';
-}
-document.getElementById('createBtn').addEventListener('click', () => {
-  window.location.href = 'create.html';
-});
-document.getElementById('heartBtn').addEventListener('click', () => {
-  window.location.href = 'like.html';
-});
 
+  // Chuyển trang
+  document.getElementById('createBtn').addEventListener('click', () => {
+    window.location.href = 'create.html';
+  });
+  document.getElementById('heartBtn').addEventListener('click', () => {
+    window.location.href = 'like.html';
+  });
 
-
-document.addEventListener('DOMContentLoaded', () => {
+  // Menu & Theme toggle
   const menuToggle = document.getElementById('menuToggle');
   const menuPopup = document.getElementById('menuPopup');
   const overlay = document.getElementById('menuOverlay');
 
-  const currentPage = window.location.pathname.includes('home')
-    ? 'home'
-    : window.location.pathname.includes('search')
-    ? 'search'
-    : window.location.pathname.includes('profile')
-    ? 'profile'
-    : 'create';
-
   const pages = [
-    { name: 'Trang chủ', href: 'home.html', id: 'home' },
-    { name: 'Hồ sơ', href: 'profile.html', id: 'profile' },
-    { name: 'Tìm kiếm', href: 'search.html', id: 'search' },
-    { name: 'Đăng bài', href: 'create.html', id: 'create' },
-    { name: 'Bài đã thích', href: 'like.html', id: 'like' },
+    { name: 'Trang chủ', href: 'home.html' },
+    { name: 'Hồ sơ', href: 'profile.html' },
+    { name: 'Tìm kiếm', href: 'search.html' },
+    { name: 'Đăng bài', href: 'create.html' },
+    { name: 'Bài đã thích', href: 'like.html' },
   ];
 
-  // Xóa cũ, tạo nút mới
   menuPopup.innerHTML = '';
   pages.forEach(page => {
-    if (page.id !== currentPage) {
+    const currentPage = window.location.pathname.includes(page.href);
+    if (!currentPage) {
       const btn = document.createElement('button');
       btn.textContent = page.name;
       btn.onclick = () => window.location.href = page.href;
@@ -72,9 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Nút chuyển theme
+  const themeToggleBtn = document.createElement('button');
+  themeToggleBtn.id = 'themeToggleBtn';
+  themeToggleBtn.textContent = savedTheme === 'light' ?  '🌑' : '🌕';
+  themeToggleBtn.onclick = () => {
+    const currentTheme = document.body.dataset.theme || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+  };
+  menuPopup.appendChild(themeToggleBtn);
+
   // Toggle menu
   let isOpen = false;
-
   menuToggle.addEventListener('click', () => {
     isOpen = !isOpen;
     menuPopup.style.display = isOpen ? 'flex' : 'none';
@@ -86,31 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
     menuPopup.style.display = 'none';
     overlay.style.display = 'none';
   });
-});
 
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const searchInput = document.getElementById('searchInput');
+  // Ripple effect
   const container = searchInput.closest('.ripple-container');
-
   container.addEventListener('click', function (e) {
     const ripple = document.createElement('span');
     ripple.className = 'ripple-effect';
-
     const rect = container.getBoundingClientRect();
     ripple.style.left = `${e.clientX - rect.left}px`;
     ripple.style.top = `${e.clientY - rect.top}px`;
-
     container.appendChild(ripple);
-
-    setTimeout(() => {
-      ripple.remove();
-    }, 600);
+    setTimeout(() => ripple.remove(), 600);
   });
 });
-
-
-
-

@@ -162,3 +162,25 @@ small{
   border-radius: 8px;
   width: 100%;
 }
+/* Sidebar nền trong chế độ tối */
+body[data-theme="dark"] .sidebar {
+  background-color: #111;
+}
+
+/* Màu icon trong sidebar cho dark mode */
+body[data-theme="dark"] .sidebar-icon {
+  color: white;
+}
+
+/* Màu icon cho light mode */
+body[data-theme="light"] .sidebar-icon {
+  color: black;
+}
+
+.sidebar button:hover .sidebar-icon {
+  color: #1da1f2;
+  transform: scale(1.2);
+}
+
+
+

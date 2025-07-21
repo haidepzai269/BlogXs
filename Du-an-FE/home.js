@@ -1,14 +1,19 @@
+import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+
+
+
 document.addEventListener('DOMContentLoaded', async () => {
+  const currentTheme = loadThemeFromLocalStorage();
+  // áp dụng theme local trước
+  applyTheme(currentTheme || 'dark');
   const postsContainer = document.getElementById('postsContainer');
   const menuToggle = document.getElementById('menuToggle');
   const menuPopup = document.getElementById('menuPopup');
   const overlay = document.getElementById('menuOverlay');
   const popup = document.getElementById('userPopup');
+  // 👉 THÊM Ở ĐÂY:
 
-  if (!postsContainer) {
-    console.error('❌ Không tìm thấy phần tử #postsContainer');
-    return;
-  }
+
 
   postsContainer.innerHTML = generateSkeletons(3);
 
@@ -165,6 +170,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       menuPopup.appendChild(btn);
     }
   });
+// Nút chuyển theme
+// Nút chuyển theme
+const themeToggleBtn = document.createElement('button');
+themeToggleBtn.id = 'themeToggleBtn';
+
+let selectedTheme = document.body.dataset.theme || 'dark';
+themeToggleBtn.textContent = selectedTheme === 'dark' ? '🌕' : '🌑';
+
+themeToggleBtn.onclick = () => {
+  const newTheme = selectedTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
+  applyTheme(newTheme);
+  selectedTheme = newTheme; // cập nhật lại biến
+  themeToggleBtn.textContent = newTheme === 'dark' ? '🌕' : '🌑';
+};
+
+
+
+
+menuPopup.appendChild(themeToggleBtn);
 
   let isOpen = false;
 
@@ -321,3 +346,4 @@ document.addEventListener("DOMContentLoaded", () => {
       startFogEffect();
     }
 });
+

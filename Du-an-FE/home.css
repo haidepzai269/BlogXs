@@ -328,3 +328,63 @@ body {
   height: 100vh;
   pointer-events: none;
 }
+
+
+body[data-theme="light"] {
+  background-color: #fff;
+  color: #000;
+}
+
+body[data-theme="light"] .sidebar {
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
+}
+
+body[data-theme="light"] .post {
+  background-color: #fefefe;
+  border-color: #ccc;
+}
+
+body[data-theme="light"] .like-btn {
+  color: #444;
+}
+/* === SIDEBAR CHO DARK THEME === */
+body[data-theme="dark"] .sidebar {
+  background-color: #000000;
+  border-right: 1px solid #444;
+}
+
+/* === SIDEBAR CHO LIGHT THEME === */
+body[data-theme="light"] .sidebar {
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
+}
+body, .sidebar, .post {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+/* Mặc định (dark theme) */
+/* Mặc định: dark theme */
+.sidebar-icon {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Light theme: đổi màu icon thành đen */
+body[data-theme="light"] .sidebar-icon {
+  color: black;
+}
+
+
+.sidebar button:hover .sidebar-icon {
+  color: #1da1f2;
+}
+
+#themeToggleBtn{
+  background-color: #000000;
+  border: none;
+  font-size: 30px;
+}

@@ -1,3 +1,13 @@
+// Hàm applyTheme như search.js
+function applyTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  if (themeToggleBtn) {
+    themeToggleBtn.textContent = theme === 'light' ? '🌙 Chế độ tối' : '🌞 Chế độ sáng';
+  }
+}
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("profileForm");
   const usernameInput = document.getElementById("username");
@@ -117,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         postEl.innerHTML = `
           <button class="delete-post-btn" data-id="${post.id}">🗑 Xoá</button>
           <p class="users"><strong>${post.username}</strong></p>
-          <p>${post.content}</p>
+          <p class="contents">${post.content}</p>
           <p><small>${new Date(post.created_at).toLocaleString()}</small></p>
 
         `;
@@ -264,6 +274,22 @@ document.addEventListener('DOMContentLoaded', () => {
     menuPopup.style.display = 'none';
     overlay.style.display = 'none';
   });
+     // Nút chuyển theme
+const themeToggleBtn = document.createElement('button');
+themeToggleBtn.id = 'themeToggleBtn';
+
+let currentTheme = localStorage.getItem('theme') || 'dark';
+themeToggleBtn.textContent = currentTheme === 'dark' ?  '🌕' : '🌑';
+
+themeToggleBtn.onclick = () => {
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
+  applyTheme(newTheme);
+  themeToggleBtn.textContent = newTheme === 'dark' ?  '🌕' : '🌑';
+  currentTheme = newTheme;
+};
+// Thêm vào cuối menuPopup
+menuPopup.appendChild(themeToggleBtn);
 });
 
 

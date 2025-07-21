@@ -80,3 +80,10 @@
     animation: none !important;
   }
   
+
+#themeToggleBtn{
+  background-color: #000000;
+  border: none;
+  font-size: 30px;
+}
+

@@ -10,25 +10,23 @@
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button title="Trang chủ"><i class="ph ph-house"></i></button>
-      <button title="Tìm kiếm" id="searchBtn"><i class="ph ph-magnifying-glass"></i></button>
-      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus"></i></button>
-      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user"></i></button>
-      <button title="Đã thích" id="heartBtn"><i class="ph ph-thumbs-up"></i></button>
+      <button title="Trang chủ"><i class="ph ph-house sidebar-icon"></i></button>
+      <button title="Tìm kiếm" id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus sidebar-icon"></i></button>
+      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
+      <button title="Đã thích" id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
       <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list"></i></button>
-        <div class="menu-popup" id="menuPopup">
-          <!-- Các nút sẽ được JS thêm vào -->
-        </div>
+        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
+        <div class="menu-popup" id="menuPopup"></div>
       </div>
       <div class="logout-button">
-        <button title="Đăng xuất" onclick="logout()">⏻</button>
+        <button title="Đăng xuất"  class="sidebar-icon" onclick="logout()">⏻</button>
       </div>
-           
     </nav>
+    
 
     <main class="content">
-      <h1>Trang chính - Xem bài đăng</h1>
+      <h1>Trang chủ - Xem bài đăng</h1>
       <!-- Các bài đăng sẽ được render ở đây -->
       <div id="postsContainer" class="posts"></div>
 
@@ -45,6 +43,9 @@
 🔇</button>
 
   <script src="authFetch.js"></script>
-  <script src="home.js"></script>
+
+  <script type="module" src="home.js"></script>
+
+  
 </body>
 </html>

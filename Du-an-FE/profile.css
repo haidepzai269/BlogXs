@@ -396,7 +396,13 @@
 }
 
 
-.username{
+.users{
   color: #1da1f2;
 }
-
+.contents{
+  margin-top: 12px;
+}
+small{
+  margin-top: 12px;
+  color: #525252;
+}

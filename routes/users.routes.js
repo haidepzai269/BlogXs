@@ -11,5 +11,7 @@ router.get('/profile', authenticateToken, userController.getProfile);
 router.put('/profile', authenticateToken, userController.updateProfile);
 // Route hover
 router.get('/hover/:username', usersController.getUserMiniProfile);
+// Theme
+router.put('/theme', authenticateToken, usersController.updateTheme);
 
 module.exports = router;

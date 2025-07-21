@@ -37,6 +37,22 @@ app.use('/api', likeRoutes);
 app.use('/api/profile', require('./routes/profile.routes'));
 app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muốn tách biệt
 
+app.get('/api/theme/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const result = await db.query("SELECT theme FROM users WHERE id = ?", [userId]); // với SQLite
+    // hoặc: const result = await pool.query("SELECT theme FROM users WHERE id = $1", [userId]); // PostgreSQL
+
+    if (result.length === 0 || !result[0].theme) {
+      return res.json({ theme: 'dark' }); // fallback nếu không có
+    }
+
+    res.json({ theme: result[0].theme });
+  } catch (err) {
+    console.error('Lỗi khi lấy theme:', err);
+    res.status(500).json({ error: 'Lỗi máy chủ' });
+  }
+});
 
 
 

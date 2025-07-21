@@ -70,3 +70,20 @@ exports.getUserMiniProfile = async (req, res) => {
   }
 };
 
+
+exports.updateTheme = async (req, res) => {
+  const userId = req.user.id;
+  const { theme } = req.body;
+
+  if (!['light', 'dark'].includes(theme)) {
+    return res.status(400).json({ message: 'Theme không hợp lệ' });
+  }
+
+  try {
+    await pool.query('UPDATE users SET theme = $1 WHERE id = $2', [theme, userId]);
+    res.json({ message: 'Cập nhật theme thành công' });
+  } catch (err) {
+    console.error('❌ Lỗi cập nhật theme:', err);
+    res.status(500).json({ message: 'Lỗi server' });
+  }
+};
