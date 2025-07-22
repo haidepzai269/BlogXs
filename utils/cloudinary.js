@@ -5,5 +5,22 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+// Định nghĩa hàm upload
+const uploadToCloudinary = (buffer, resource_type) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { resource_type },
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+    stream.end(buffer);
+  });
+};
 
-module.exports = cloudinary;
+// ✅ Export chuẩn để controller dùng
+module.exports = {
+  cloudinary,
+  uploadToCloudinary
+};

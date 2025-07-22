@@ -34,5 +34,6 @@ function strictAuthenticate(req, res, next) {
 // Export cả hai
 module.exports = {
   authenticateToken,
-  strictAuthenticate
+  strictAuthenticate,
+  
 };

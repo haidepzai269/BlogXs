@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BlogXs Shorts</title>
+  <link rel="stylesheet" href="shorts.css" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar dùng lại từ home.html -->
+    <nav class="sidebar">
+        <button id="homeBtn" title="Trang chủ"><i class="ph ph-house sidebar-icon"></i></button>
+        <button id="searchBtn" title="Tìm kiếm"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+        <button id="createBtn" title="Tạo bài đăng"><i class="ph ph-plus sidebar-icon"></i></button>
+        <button id="profileBtn" title="Hồ sơ cá nhân"><i class="ph ph-user sidebar-icon"></i></button>
+        <button id="heartBtn" title="Đã thích"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
+        <button class="active" title="Short Video"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <div class="menu-bottom">
+        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
+        <div class="menu-popup" id="menuPopup"></div>
+      </div>
+      <div class="logout-button">
+        <button class="sidebar-icon" title="Đăng xuất" onclick="logout()">⏻</button>
+      </div>
+    </nav>
+
+    <!-- Khu vực chính chia 2 phần -->
+    <main class="shorts-content">
+      <!-- Khung đăng video -->
+      <div class="upload-section">
+        <h2>Đăng video ngắn</h2>
+        <form id="uploadForm">
+            <label for="videoInput" class="custom-file-upload">
+                <i class="ph ph-camera" style="font-size: 2rem;"></i> <!-- Camera icon -->
+              </label>
+              <input type="file" accept="video/*" id="videoInput" required hidden />              
+          <textarea id="captionInput" placeholder="Mô tả video..."></textarea>
+          <button type="submit">Đăng video</button>
+        </form>
+      </div>
+
+      <!-- Khung xem video giống TikTok -->
+      <div class="shorts-viewer sidebar-icon" id="shortsViewer">
+        <!-- Video sẽ được render từ JS -->
+      </div>
+    </main>
+  </div>
+  <div class="overlay" id="menuOverlay"></div>
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+  </script>
+  
+  <script src="authFetch.js"></script>
+  <script type="module" src="shorts.js"></script>
+</body>
+</html>

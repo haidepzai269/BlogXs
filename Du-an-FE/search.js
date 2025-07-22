@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('profileBtn').addEventListener('click', () => {
     window.location.href = 'profile.html';
   });
-
+  document.getElementById('shortBtn').addEventListener('click', () => {
+    window.location.href = 'shorts.html';
+  });
   // Menu & Theme toggle
   const menuToggle = document.getElementById('menuToggle');
   const menuPopup = document.getElementById('menuPopup');

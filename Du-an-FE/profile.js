@@ -218,7 +218,9 @@ document.getElementById('createBtn').addEventListener('click', () => {
 document.getElementById('heartBtn').addEventListener('click', () => {
   window.location.href = 'like.html';
 });
-
+document.getElementById('shortBtn').addEventListener('click', () => {
+  window.location.href = 'shorts.html';
+});
 // Hàm đăng xuất
 function logout() {
   localStorage.removeItem("accessToken");

@@ -196,3 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
   input.addEventListener('input', togglePlaceholder);
   togglePlaceholder(); // chạy ngay từ đầu để đồng bộ trạng thái
 });
+document.getElementById('shortBtn').addEventListener('click', () => {
+  window.location.href = 'shorts.html';
+});

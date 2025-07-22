@@ -145,7 +145,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.goToProfile = function () {
     window.location.href = 'profile.html';
   };
-
+  document.getElementById('shortBtn').addEventListener('click', () => {
+    window.location.href = 'shorts.html';
+  });
+  
   // ======= Menu popup =======
   const currentPage = window.location.pathname.includes('home')
     ? 'home'

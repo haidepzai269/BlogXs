@@ -62,7 +62,9 @@ function logout() {
     localStorage.clear();
     window.location.href = 'auth.html';
   }
-
+  document.getElementById('shortBtn').addEventListener('click', () => {
+    window.location.href = 'shorts.html';
+  });
 
   document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menuToggle');
