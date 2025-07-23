@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     postsContainer.innerHTML = '';
 
-    posts.forEach(post => {
+    for (const post of posts) {
       const liked = likedPostIds.includes(post.id);
       const postEl = document.createElement('div');
       postEl.className = 'post';
@@ -47,31 +47,91 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="time">${new Date(post.created_at).toLocaleString()}</span>
         </div>
       `;
-      const likeBtn = postEl.querySelector('.like-btn');
+    
+      // Bình luận
+      const commentsContainer = document.createElement('div');
+      commentsContainer.className = 'comments-container';
+    
+      const commentForm = document.createElement('form');
+      commentForm.className = 'comment-form';
+      commentForm.innerHTML = `
+        <input type="text" placeholder="Viết bình luận..." class="comment-input" />
+        <button class="commentBtn" type="submit" aria-label="Gửi bình luận">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
+                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+            </svg>
+        </button>
 
+      `;
+    
+      commentsContainer.appendChild(commentForm);
+      postEl.appendChild(commentsContainer);
+    
+      // 🛠 Fetch bình luận — await OK ở đây
+      const fetchComments = async () => {
+        try {
+          const res = await authFetch(`/api/comments/${post.id}`);
+          if (!res.ok) throw new Error('Lỗi lấy bình luận');
+          const comments = await res.json();
+          const commentList = document.createElement('div');
+          commentList.className = 'comment-list';
+          commentList.innerHTML = comments.map(c => `
+            <div class="comment">
+              <span class="comment-user">@${c.username}</span>: 
+              <span class="comment-content">${c.content}</span>
+            </div>
+          `).join('');
+          commentsContainer.appendChild(commentList);
+        } catch (err) {
+          console.error(err.message);
+        }
+      };
+      await fetchComments();
+    
+      // Gửi bình luận
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = commentForm.querySelector('.comment-input');
+        const content = input.value.trim();
+        if (!content) return;
+    
+        try {
+          const res = await authFetch(`/api/comments/${post.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+          });
+          if (!res.ok) throw new Error('Không thể gửi bình luận');
+          input.value = '';
+          commentsContainer.querySelector('.comment-list')?.remove();
+          await fetchComments();
+        } catch (err) {
+          console.error(err.message);
+          alert('Không gửi được bình luận');
+        }
+      });
+    
+      // Like
+      const likeBtn = postEl.querySelector('.like-btn');
       likeBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
         const btn = e.currentTarget;
         const postId = btn.dataset.postId;
         const liked = btn.classList.contains('liked');
-      
+    
         try {
           if (liked) {
             const res = await authFetch(`/api/posts/${postId}/like`, {
               method: 'DELETE',
             });
-      
             if (!res.ok) throw new Error('Không unlike được');
-      
             btn.classList.remove('liked');
             btn.textContent = '🤍';
           } else {
             const res = await authFetch(`/api/posts/${postId}/like`, {
               method: 'POST',
             });
-      
             if (!res.ok) throw new Error('Không like được');
-      
             btn.classList.add('liked');
             btn.textContent = '❤️';
           }
@@ -80,19 +140,18 @@ document.addEventListener('DOMContentLoaded', async () => {
           alert('Không thể thực hiện hành động. Vui lòng thử lại!');
         }
       });
-      
+    
+      // Hover popup
       const usernameSpan = postEl.querySelector('.username');
-
-      // Sự kiện click để hiện popup
       usernameSpan.addEventListener('click', async (e) => {
         e.stopPropagation();
         const username = post.username;
-
+    
         try {
           const res = await authFetch(`/api/users/hover/${username}`);
           if (!res.ok) throw new Error('Không lấy được thông tin người dùng');
           const data = await res.json();
-
+    
           popup.innerHTML = `
             <div class="cover" style="background-image: url('${data.cover_url || ''}')"></div>
             <img class="avatar" src="${data.avatar_url || ''}" />
@@ -101,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               đã tham gia BlogXs vào ${new Date(data.created_at).toLocaleDateString('vi-VN')}
             </div>
           `;
-
+    
           const rect = usernameSpan.getBoundingClientRect();
           popup.style.top = `${window.scrollY + rect.bottom + 8}px`;
           popup.style.left = `${window.scrollX + rect.left}px`;
@@ -110,9 +169,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           console.error('❌ Lỗi popup:', err.message);
         }
       });
-
+    
       postsContainer.appendChild(postEl);
-    });
+    }
+    
 
     // Ẩn popup khi click ra ngoài (đặt ngoài vòng forEach)
     document.addEventListener('click', (e) => {

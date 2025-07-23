@@ -10,6 +10,8 @@ const likeRoutes = require('./routes/likes.routes');
 const userHoverRoutes = require('./routes/users.routes');
 const searchRoutes = require('./routes/search.routes');
 const shortsRoutes = require('./routes/shorts.routes');
+const commentRoutes = require('./routes/comment.routes');
+
 
 
 
@@ -42,7 +44,7 @@ app.use('/api', likeRoutes);
 app.use('/api/profile', require('./routes/profile.routes'));
 app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muốn tách biệt
 app.use('/api/shorts', shortsRoutes);
-
+app.use('/api/comments', commentRoutes);
 
 
 
