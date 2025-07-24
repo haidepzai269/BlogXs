@@ -16,7 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup các DOM khác
   const searchInput = document.getElementById('searchInput');
   const postsContainer = document.getElementById('postsContainer');
+  const suggestionList = document.getElementById('suggestionList'); // <-- thêm dòng này
 
+  // 👇 Gợi ý tìm kiếm
+  searchInput.addEventListener('focus', async () => {
+    try {
+      const res = await fetch('/api/posts/popular-queries');
+      const keywords = await res.json();
+      console.log('👉 Gợi ý nhận được:', keywords); // 👈 Thêm dòng này
+      console.log('📦 DOM suggestionList:', suggestionList);
+
+      suggestionList.innerHTML = keywords.map(keyword =>
+        `<li class="suggestion-item">${keyword}</li>`
+      ).join('');
+      suggestionList.style.display = 'block'; // 👈 Cái này rất quan trọng
+    } catch (err) {
+      console.error('❌ Lỗi tải gợi ý:', err.message);
+    }
+  });
+
+  suggestionList.addEventListener('click', e => {
+    if (e.target.classList.contains('suggestion-item')) {
+      searchInput.value = e.target.textContent;
+      searchInput.dispatchEvent(new Event('input'));
+  
+      // Thêm hiệu ứng biến mất mượt
+      suggestionList.classList.add('hide');
+      setTimeout(() => {
+        suggestionList.style.display = 'none';
+        suggestionList.classList.remove('hide'); // Reset để lần sau hiện lại mượt
+      }, 300); // Phù hợp với transition 0.3s
+    }
+  });
+  
+
+  // Xử lý khi nhập từ khóa tìm kiếm
   searchInput.addEventListener('input', async () => {
     const query = searchInput.value.trim();
     if (query === '') return;
@@ -118,4 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
     container.appendChild(ripple);
     setTimeout(() => ripple.remove(), 600);
   });
+});
+
+document.addEventListener('click', (e) => {
+  if (!suggestionList.contains(e.target) && e.target !== searchInput) {
+    suggestionList.classList.add('hide');
+    setTimeout(() => {
+      suggestionList.style.display = 'none';
+      suggestionList.classList.remove('hide');
+    }, 300);
+  }
 });

@@ -16,5 +16,7 @@ router.post('/', authenticateToken, postController.createPost);
 
 // ✅ Xóa bài viết
 router.delete('/:id', authenticateToken, postController.deletePost);
+// Từ khóa phổ biến 
+router.get('/popular-queries', postController.getPopularSearchTerms);
 
 module.exports = router;

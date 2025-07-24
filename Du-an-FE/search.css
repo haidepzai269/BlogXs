@@ -184,3 +184,69 @@ body[data-theme="light"] .sidebar-icon {
 
 
 
+
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Hiển thị gợi ý */
+/* Gợi ý chung */
+#suggestionList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border-radius: 12px;
+  padding: 8px 0;
+  z-index: 1000;
+  list-style: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Gợi ý trong theme tối */
+[data-theme="dark"] #suggestionList {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* Gợi ý trong theme sáng */
+[data-theme="light"] #suggestionList {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+#suggestionList li {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Hover trong theme tối */
+[data-theme="dark"] #suggestionList li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hover trong theme sáng */
+[data-theme="light"] #suggestionList li:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Khi ẩn gợi ý */
+#suggestionList.hide {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}

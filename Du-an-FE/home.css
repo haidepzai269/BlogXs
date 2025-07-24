@@ -404,18 +404,18 @@ body[data-theme="light"] .sidebar-icon {
 .comment-input {
   flex: 1;
   padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #888;
+  border-radius: 20px;
+  border: 1px solid #31baff;
   background-color: var(--input-bg);
   color: var(--text-color);
 }
 
 .comment-form button {
   padding: 5px 10px;
-  background-color: #121212;
+  background-color: #000;
   border: none;
-  border-radius: 4px;
-  color: rgb(148, 148, 148);
+  border-radius: 20px;
+  color: rgb(73, 73, 73);
   cursor: pointer;
   transition: 0.2s ease;
 }

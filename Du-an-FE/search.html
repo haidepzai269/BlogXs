@@ -35,11 +35,16 @@
 
     <main class="content">
       <h1>🔍 Tìm kiếm bài viết</h1>
-      <div class="ripple-container search-bar ">
-        <input type="text" id="searchInput" placeholder=" " />
-        <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
-        <i class="ph ph-magnifying-glass search-icon"></i>
-      </div>                
+      <div class="search-wrapper">
+        <div class="ripple-container search-bar">
+          <input type="text" id="searchInput" placeholder=" " autocomplete="off" />
+          <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
+          <i class="ph ph-magnifying-glass search-icon"></i>
+        </div>
+        <ul id="suggestionList" class="suggestion-list"></ul> <!-- Gợi ý nằm dưới input -->
+      </div>
+            
+           
       <div id="postsContainer" class="posts"></div>
     </main>
   </div>

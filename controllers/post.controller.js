@@ -18,6 +18,16 @@ exports.searchPosts = async (req, res) => {
   const { q } = req.query;
 
   try {
+    // Ghi lại từ khóa đã tìm
+    await db.query(`
+      INSERT INTO search_queries (query)
+      VALUES ($1)
+      ON CONFLICT (query) DO UPDATE
+      SET count = search_queries.count + 1,
+          last_searched_at = CURRENT_TIMESTAMP
+    `, [q]);
+
+    // Gửi truy vấn đến Elasticsearch
     const searchQuery = {
       index: 'posts',
       body: {
@@ -30,23 +40,29 @@ exports.searchPosts = async (req, res) => {
       }
     };
 
-    // 🔍 In ra truy vấn gửi lên Elasticsearch
-    console.log('=== Sending ES Search with ===');
-    console.dir(searchQuery, { depth: null });
-
     const result = await client.search(searchQuery);
-
-    // ✅ In ra kết quả trả về từ Elasticsearch
-    console.log('✅ ES result hits:', result.body.hits.hits);
-
     const hits = result.body.hits.hits.map(hit => hit._source);
     res.json(hits);
   } catch (error) {
-    console.error('❌ Lỗi Elasticsearch:', error.meta?.body?.error || error.message);
+    console.error('❌ Lỗi tìm kiếm:', error.message);
     res.status(500).json({ error: 'Lỗi tìm kiếm bài đăng' });
   }
 };
 
+
+exports.getPopularSearchTerms = async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT query FROM search_queries
+      ORDER BY count DESC, last_searched_at DESC
+      LIMIT 5
+    `);
+    res.json(result.rows.map(r => r.query));
+  } catch (err) {
+    console.error('❌ Lỗi lấy gợi ý từ khóa:', err.message);
+    res.status(500).json({ error: 'Lỗi lấy gợi ý' });
+  }
+};
 
 
 
