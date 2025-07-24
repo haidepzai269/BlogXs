@@ -40,11 +40,88 @@
     </main>
   </div>
   <div class="overlay" id="menuOverlay"></div>
+  <div id="logoContainer"></div>
+  <canvas id="fireworksCanvas"></canvas>  
   <script src="authFetch.js"></script>
   <script  src="create.js"></script>
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.body?.setAttribute('data-theme', savedTheme);
   </script>
+  <script>
+    const logoContainer = document.getElementById('logoContainer');
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const text = 'BlogXs';
+    
+    // ----- FIREWORKS -----
+    const fireworks = [];
+    
+    function createFirework(x, y) {
+      for (let i = 0; i < 40; i++) {
+        fireworks.push({
+          x, y,
+          angle: Math.random() * 2 * Math.PI,
+          speed: Math.random() * 5 + 2,
+          radius: Math.random() * 3 + 2,
+          alpha: 1,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+      }
+    }
+    
+    function updateFireworks() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach((f, i) => {
+        f.x += Math.cos(f.angle) * f.speed;
+        f.y += Math.sin(f.angle) * f.speed;
+        f.alpha -= 0.01;
+        if (f.alpha <= 0) fireworks.splice(i, 1);
+        else {
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+          ctx.fillStyle = f.color;
+          ctx.globalAlpha = f.alpha;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+      requestAnimationFrame(updateFireworks);
+    }
+    updateFireworks();
+    // ----------------------
+    
+    async function showLetters() {
+      logoContainer.innerHTML = '';
+    
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        span.classList.add('glow-letter');
+        span.style.animationDelay = `${i * 0.2}s`;
+        logoContainer.appendChild(span);
+      }
+    
+      await new Promise(r => setTimeout(r, text.length * 200 + 800));
+    
+      // Hiện đủ chữ -> bắn pháo hoa tại vị trí chữ
+      const rect = logoContainer.getBoundingClientRect();
+      const fireworkX = rect.left + rect.width / 2;
+      const fireworkY = rect.top;
+    
+      createFirework(fireworkX, fireworkY);
+    
+      await new Promise(r => setTimeout(r, 1500));
+      logoContainer.innerHTML = '';
+    }
+    
+    setInterval(showLetters, 4500);
+    showLetters();
+    </script>
+    
 </body>
 </html>
