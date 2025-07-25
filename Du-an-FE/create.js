@@ -133,4 +133,46 @@ menuPopup.appendChild(themeToggleBtn);
   });
   
 
-  
+
+
+// Qr code
+document.addEventListener('DOMContentLoaded', () => {
+  const generateBtn = document.getElementById('generateQRBtn');
+  const input = document.getElementById('qrLinkInput');
+  const popup = document.getElementById('qrPopup');
+  const qrCodeContainer = document.getElementById('qrCodeContainer');
+  const closeBtn = document.getElementById('closeQRPopup');
+
+  generateBtn.addEventListener('click', () => {
+    const link = input.value.trim();
+    if (!link) return alert('Vui lòng nhập link hợp lệ!');
+
+    qrCodeContainer.innerHTML = ''; // clear old QR
+    new QRCode(qrCodeContainer, {
+      text: link,
+      width: 180,
+      height: 180,
+      colorDark: "#ffffff",
+      colorLight: "#000000",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    popup.classList.add('show');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    popup.classList.remove('show');
+    // Delay để đồng bộ hiệu ứng trước khi ẩn hẳn
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 300);
+  });
+
+  // Kích hoạt lại display khi class show được thêm
+  const observer = new MutationObserver(() => {
+    if (popup.classList.contains('show')) {
+      popup.style.display = 'flex';
+    }
+  });
+  observer.observe(popup, { attributes: true, attributeFilter: ['class'] });
+});

@@ -1,5 +1,38 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
 
+function showToast(message, options = {}) {
+  const {
+    icon = '🔔',
+    duration = 4000,
+    bgColor = '#323232',
+    textColor = '#fff'
+  } = options;
+
+  const toastContainer = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.style.backgroundColor = bgColor;
+  toast.style.color = textColor;
+
+  toast.innerHTML = `
+    <span class="toast-icon">${icon}</span>
+    <span class="toast-message">${message}</span>
+    <span class="toast-close">&times;</span>
+  `;
+
+  toast.querySelector('.toast-close').onclick = () => removeToast(toast);
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => removeToast(toast), duration);
+}
+
+function removeToast(toast) {
+  toast.style.animation = 'slideOut 0.4s forwards';
+  setTimeout(() => {
+    toast.remove();
+  }, 400);
+}
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -12,7 +45,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   const overlay = document.getElementById('menuOverlay');
   const popup = document.getElementById('userPopup');
   // 👉 THÊM Ở ĐÂY:
+  setInterval(fetchNotifications, 1000); // mỗi 1 giây
 
+  async function fetchNotifications() {
+    try {
+      const res = await authFetch('/api/notify');
+      const notifies = await res.json();
+  
+      // Dùng bộ nhớ tạm để không lặp lại popup cũ
+      if (!window.shownNotifications) window.shownNotifications = new Set();
+  
+      if (notifies.length > 0) {
+        const latestNotify = notifies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+      
+        if (!window.shownNotifications.has(latestNotify.id)) {
+          showPopup(latestNotify.content);
+          window.shownNotifications.add(latestNotify.id);
+        }
+      }      
+    } catch (err) {
+      console.error('Không thể lấy thông báo:', err);
+    }
+  }
+  
+  function showPopup(msg) {
+    showToast(msg, { icon: '📢', bgColor: '#444' });
+  }
+  
+  
 
 
   postsContainer.innerHTML = generateSkeletons(3);
@@ -21,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const [postsRes, likedRes] = await Promise.all([
       authFetch('/api/posts'),
       authFetch('/api/posts/liked'),
+      authFetch('/api/notify'),
     ]);
 
     if (!postsRes.ok || !likedRes.ok)
@@ -30,6 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const likedData = await likedRes.json();
     const likedPostIds = likedData.likedPosts.map(p => p.post_id);
 
+    
     postsContainer.innerHTML = '';
 
     for (const post of posts) {

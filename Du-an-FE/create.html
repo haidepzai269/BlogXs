@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="home.css" />
   <link rel="stylesheet" href="create.css">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
 <body>
   <div class="container">
@@ -38,6 +40,23 @@
       </form>
       <p id="postMessage" class="status-message"></p>
     </main>
+    <!-- QR Link Input -->
+    <div class="qr-link-container">
+      <input type="text" id="qrLinkInput" placeholder="🔗 Dán link để tạo QR" />
+      <button id="generateQRBtn" title="Tạo mã QR">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h2l2-3h10l2 3h2a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V9a2 2 0 012-2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </button>
+    </div>
+
+<!-- QR Popup -->
+    <div id="qrPopup" class="qr-popup">
+      <div id="qrCodeContainer"></div>
+      <button id="closeQRPopup">✖</button>
+     </div>
+
   </div>
   <div class="overlay" id="menuOverlay"></div>
   <div id="logoContainer"></div>
@@ -121,7 +140,6 @@
     
     setInterval(showLetters, 4500);
     showLetters();
-    </script>
-    
+    </script>    
 </body>
 </html>
