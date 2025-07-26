@@ -145,19 +145,51 @@ document.addEventListener('DOMContentLoaded', async () => {
           const res = await authFetch(`/api/comments/${post.id}`);
           if (!res.ok) throw new Error('Lỗi lấy bình luận');
           const comments = await res.json();
+      
           const commentList = document.createElement('div');
-          commentList.className = 'comment-list';
-          commentList.innerHTML = comments.map(c => `
-            <div class="comment">
-              <span class="comment-user">@${c.username}</span>: 
-              <span class="comment-content">${c.content}</span>
-            </div>
-          `).join('');
+          commentList.classList.add('comment-list');
+      
+          const isLong = comments.length >= 5;
+          let expanded = false;
+      
+          function renderComments(collapsed = true) {
+            commentList.innerHTML = '';
+            const commentsToShow = collapsed ? comments.slice(0, 3) : comments;
+            commentsToShow.forEach(c => {
+              const div = document.createElement('div');
+              div.className = 'comment';
+              div.innerHTML = `<span class="comment-user">@${c.username}</span>: 
+                               <span class="comment-content">${c.content}</span>`;
+              commentList.appendChild(div);
+            });
+      
+            commentList.classList.remove('collapsed', 'expanded');
+            commentList.classList.add(collapsed ? 'collapsed' : 'expanded');
+          }
+      
+          renderComments(true);
           commentsContainer.appendChild(commentList);
+      
+          if (isLong) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'view-more-btn';
+            toggleBtn.textContent = 'Xem thêm bình luận';
+      
+            toggleBtn.addEventListener('click', () => {
+              expanded = !expanded;
+              renderComments(!expanded);
+              toggleBtn.textContent = expanded ? 'Thu gọn bình luận' : 'Xem thêm bình luận';
+              if (!expanded) {
+                commentList.scrollTop = 0;
+              }
+            });
+      
+            commentsContainer.appendChild(toggleBtn);
+          }
         } catch (err) {
           console.error(err.message);
         }
-      };
+      };      
       await fetchComments();
     
       // Gửi bình luận
