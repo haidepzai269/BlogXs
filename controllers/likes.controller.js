@@ -57,3 +57,17 @@ exports.getLikedPosts = async (req, res) => {
     res.status(500).json({ error: 'Lỗi khi lấy danh sách liked posts' });
   }
 };
+
+exports.getLikesCount = async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT post_id, COUNT(*) as like_count
+      FROM likes
+      GROUP BY post_id
+    `);
+    res.json(result.rows); // [{ post_id: 1, like_count: 5 }, ...]
+  } catch (err) {
+    console.error('Lỗi lấy số lượt like:', err);
+    res.status(500).json({ error: 'Lỗi khi lấy số lượt like' });
+  }
+};

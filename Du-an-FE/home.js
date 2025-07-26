@@ -78,11 +78,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   postsContainer.innerHTML = generateSkeletons(3);
 
   try {
-    const [postsRes, likedRes] = await Promise.all([
+    const [postsRes, likedRes, , likeCountRes] = await Promise.all([
       authFetch('/api/posts'),
       authFetch('/api/posts/liked'),
-      authFetch('/api/notify'),
+      authFetch('/api/notify'), // giữ nguyên để fetch thông báo
+      authFetch('/api/likes/count'),
     ]);
+    
+    const likeCountsRaw = await likeCountRes.json();
+    // Convert array to map: { postId: count }
+    const likeCounts = {};
+    likeCountsRaw.forEach(item => {
+      likeCounts[item.post_id] = parseInt(item.like_count);
+    });
 
     if (!postsRes.ok || !likedRes.ok)
       throw new Error('Không lấy được dữ liệu bài viết hoặc like');
@@ -98,17 +106,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       const liked = likedPostIds.includes(post.id);
       const postEl = document.createElement('div');
       postEl.className = 'post';
-    
+      const count = likeCounts[post.id] || 0;
       postEl.innerHTML = `
-        <span class="username">@${post.username}</span>
-        <p class="content-text">${post.content}</p>
-        <div class="post-footer">
-          <button class="like-btn ${liked ? 'liked' : ''}" data-post-id="${post.id}">
-            ${liked ? '❤️' : '🤍'}
-          </button>
-          <span class="time">${new Date(post.created_at).toLocaleString()}</span>
-        </div>
-      `;
+      <span class="username">@${post.username}</span>
+      <p class="content-text">${post.content}</p>
+      <div class="post-footer">
+        <button class="like-btn ${liked ? 'liked' : ''}" data-post-id="${post.id}">
+          ${liked ? '❤️' : '🤍'}
+        </button>
+        <span class="like-count">${count} lượt thích</span>
+        <span class="time">${new Date(post.created_at).toLocaleString()}</span>
+      </div>
+    `;
+    
     
       // Bình luận
       const commentsContainer = document.createElement('div');
