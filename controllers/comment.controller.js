@@ -36,9 +36,29 @@ exports.createComment = async (req, res) => {
        RETURNING *`,
       [postId, userId, content]
     );
-    res.status(201).json(result.rows[0]);
+
+    const newComment = result.rows[0];
+
+    // Lấy username của người bình luận
+    const userRes = await db.query(
+      `SELECT username FROM users WHERE id = $1`,
+      [userId]
+    );
+
+    const username = userRes.rows[0]?.username || 'Ẩn danh';
+    const fullComment = {
+      ...newComment,
+      username
+    };
+
+    // Emit qua Socket.IO
+    const io = req.app.get('io');
+    io.emit('new_comment', fullComment); // gửi đến tất cả client
+
+    res.status(201).json(fullComment); // trả về cả username luôn
   } catch (err) {
     console.error('Lỗi tạo bình luận:', err);
     res.status(500).json({ error: 'Lỗi server khi tạo bình luận' });
   }
 };
+

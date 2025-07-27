@@ -32,6 +32,14 @@
       <div id="postsContainer" class="posts"></div>
 
     </main>
+    <!-- Nút thông báo giống YouTube -->
+        <div class="notification-wrapper">
+            <button id="notificationBtn" title="Thông báo">
+              <i class="ph ph-bell notification-icon"></i>
+            <span id="notificationCount" class="notification-count" style="display: none;">0</span>
+           </button>
+        </div>
+
     <div class="current-time" id="currentTime"></div>
 
   </div>
@@ -48,6 +56,7 @@
   <script src="authFetch.js"></script>
 
   <script type="module" src="home.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
 
   

@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { getNotifications } = require('../controllers/notify.controller');
+const { authenticateToken } = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+// ✅ Route công khai (không cần login)
+router.get('/public', async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT * FROM notifications ORDER BY created_at DESC LIMIT 10'
@@ -13,5 +16,8 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Lỗi server' });
   }
 });
+
+// ✅ Route cần token
+router.get('/', authenticateToken, getNotifications);
 
 module.exports = router;

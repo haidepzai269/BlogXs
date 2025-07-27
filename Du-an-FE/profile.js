@@ -1,4 +1,8 @@
 // Hàm applyTheme như search.js
+import io from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+
+
+
 function applyTheme(theme) {
   document.body.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
@@ -307,4 +311,66 @@ avatarImage.addEventListener("mouseenter", () => {
 // Rời chuột khỏi avatar → ẩn ảnh lớn
 avatarImage.addEventListener("mouseleave", () => {
   avatarFullscreen.classList.remove("active");
+});
+
+
+// Lấy userId từ localStorage
+const user = JSON.parse(localStorage.getItem("user"));
+const userId = user?.id;
+
+const socket = io("http://localhost:3000"); // hoặc domain thật
+
+if (userId) {
+  socket.emit('register', userId);
+}
+
+// Xử lý khi có thông báo like mới
+socket.on('new-like-notification', (data) => {
+  const notificationList = document.getElementById("notification-list");
+  const li = document.createElement("li");
+  li.textContent = `${data.senderUsername} đã thích bài viết của bạn`;
+  notificationList.prepend(li);
+
+  // Hiển thị badge đỏ nếu muốn
+  const badge = document.getElementById("notification-badge");
+  if (badge) {
+    badge.style.display = "inline-block";
+  }
+});
+
+
+// fix
+function showNotificationPopup(message) {
+  const container = document.getElementById('notification-popup-container');
+  const div = document.createElement('div');
+  div.className = 'notification-popup';
+  div.textContent = message;
+  container.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+socket.on('new_notification', ({ senderUsername }) => {
+  // Hiện dấu đỏ nếu ẩn
+  document.getElementById('notification-badge').style.display = 'inline';
+
+  // Thêm vào danh sách dropdown
+  const list = document.getElementById('notification-list');
+  const li = document.createElement('li');
+  li.textContent = `${senderUsername} đã thích bài viết của bạn`;
+  list.prepend(li);
+
+  // Hiện popup
+  showNotificationPopup(`${senderUsername} đã thích bài viết của bạn`);
+});
+document.getElementById('notification-bell').addEventListener('click', async () => {
+  document.getElementById('notification-box').classList.toggle('hidden');
+
+  // Gọi API đánh dấu đã đọc nếu cần
+  await fetch('/api/notify/mark-read', {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+
+  // Ẩn dấu đỏ
+  document.getElementById('notification-badge').style.display = 'none';
 });

@@ -12,6 +12,7 @@ const searchRoutes = require('./routes/search.routes');
 const shortsRoutes = require('./routes/shorts.routes');
 const commentRoutes = require('./routes/comment.routes');
 const notifyRoutes = require('./routes/notify.routes');
+const notifyRoute = require('./routes/notify.routes');
 
 
 
@@ -48,6 +49,8 @@ app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muố
 app.use('/api/shorts', shortsRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/notify', notifyRoutes);
+app.use('/api/notify/public', notifyRoute);
+
 
 
 module.exports = app;

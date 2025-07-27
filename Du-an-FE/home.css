@@ -31,7 +31,6 @@ html {
   top: 0;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
   position: relative;
   border-right: 1px solid #222;
 }
@@ -53,7 +52,7 @@ html {
 
 .menu-bottom {
   margin-top: auto;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* Main content */
@@ -567,3 +566,38 @@ body {
   scrollbar-color: #444 #111;
 }
 
+
+.notification-wrapper {
+  position: fixed;
+  top: 10px;
+  right: 180px; /* điều chỉnh gần đồng hồ */
+  z-index: 9999;
+  margin-right: 50px;
+}
+
+#notificationBtn {
+  background-color: #131313;
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  position: relative;
+  color: white;
+}
+
+.notification-icon {
+  font-size: 24px;
+}
+
+.notification-count {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: red;
+  color: white;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+}

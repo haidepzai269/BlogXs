@@ -103,19 +103,28 @@ exports.createPost = async (req, res) => {
       [userId, username, content]
     );
 
-    // ✅ Đồng bộ Elasticsearch nhưng không làm fail nếu lỗi
+    const newPost = result.rows[0];
+
+    // ✅ Đồng bộ Elasticsearch
     try {
-      await indexPostToES(result.rows[0]);
+      await indexPostToES(newPost);
     } catch (esError) {
       console.error('⚠️ Lỗi sync Elasticsearch (create):', esError.message || esError);
     }
 
-    res.status(201).json(result.rows[0]);
+    // ✅ Emit bài viết mới qua Socket.IO
+    const io = req.app.get('io'); // Lấy io từ app
+    if (io) {
+      io.emit('new_post', newPost);
+    }
+
+    res.status(201).json(newPost);
   } catch (err) {
     console.error('❌ Lỗi tạo bài viết:', err);
     res.status(500).json({ error: 'Lỗi server khi tạo bài viết' });
   }
 };
+
 
 
 

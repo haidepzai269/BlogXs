@@ -1,4 +1,6 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+const socket = io(); // auto lấy host hiện tại (nếu backend chạy cùng domain)
+const currentUserId = localStorage.getItem('userId'); // hoặc cách bạn lấy ID người dùng
 
 function showToast(message, options = {}) {
   const {
@@ -81,8 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const [postsRes, likedRes, , likeCountRes] = await Promise.all([
       authFetch('/api/posts'),
       authFetch('/api/posts/liked'),
-      authFetch('/api/notify'), // giữ nguyên để fetch thông báo
+      authFetch('/api/notify/public'), // giữ nguyên để fetch thông báo
       authFetch('/api/likes/count'),
+      authFetch('/api/notify/'), // giữ nguyên để fetch thông báo
+
     ]);
     
     const likeCountsRaw = await likeCountRes.json();
@@ -514,3 +518,81 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+
+socket.on('new_post', (post) => {
+  prependPost(post);
+});
+
+// Hàm thêm bài viết vào đầu trang
+function prependPost(post) {
+  const postsContainer = document.getElementById('postsContainer');
+  const postEl = document.createElement('div');
+  postEl.className = 'post';
+
+  postEl.innerHTML = `
+    <span class="username">@${post.username}</span>
+    <p class="content-text">${post.content}</p>
+    <div class="post-footer">
+      <button class="like-btn" data-post-id="${post.id}">🤍</button>
+      <span class="like-count">0 lượt thích</span>
+      <span class="time">${new Date(post.created_at).toLocaleString()}</span>
+    </div>
+  `;
+
+  postsContainer.prepend(postEl);
+}
+
+
+// comment io
+socket.on('new_comment', (comment) => {
+  const { post_id, username, content } = comment;
+  
+  // Tìm post tương ứng trong DOM
+  const postEls = document.querySelectorAll('.post');
+  postEls.forEach(postEl => {
+    const likeBtn = postEl.querySelector('.like-btn');
+    if (!likeBtn) return;
+    const postId = parseInt(likeBtn.dataset.postId);
+
+    if (postId === post_id) {
+      const commentList = postEl.querySelector('.comment-list');
+      if (commentList) {
+        const div = document.createElement('div');
+        div.className = 'comment';
+        div.innerHTML = `<span class="comment-user">@${username}</span>: 
+                         <span class="comment-content">${content}</span>`;
+        commentList.appendChild(div);
+
+        // Scroll to bottom nếu đang mở
+        if (commentList.classList.contains('expanded')) {
+          commentList.scrollTop = commentList.scrollHeight;
+        }
+      }
+    }
+  });
+});
+socket.on('like_updated', ({ postId, likeCount }) => {
+  const postEls = document.querySelectorAll('.post');
+  postEls.forEach(postEl => {
+    const likeBtn = postEl.querySelector('.like-btn');
+    if (!likeBtn) return;
+
+    const btnPostId = parseInt(likeBtn.dataset.postId);
+    if (btnPostId === postId) {
+      const countEl = postEl.querySelector('.like-count');
+      if (countEl) {
+        countEl.textContent = `${likeCount} lượt thích`;
+      }
+    }
+  });
+});
+
+
+
+if (currentUserId) {
+  socket.emit('join', currentUserId);
+}
+
+socket.on('notify', (data) => {
+  showToast(data.message, { icon: '❤️', duration: 5000 });
+});

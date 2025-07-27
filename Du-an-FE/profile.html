@@ -17,6 +17,17 @@
       <button class="active"><i class="ph ph-user sidebar-icon"></i></button>
       <button id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
       <button title="Short Video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <div class="notification-wrapper">
+        <button id="notification-bell" title="Thông báo">
+          <i class="ph ph-bell sidebar-icon"></i>
+          <span id="notification-badge" style="display: none;">🔴</span>
+        </button>
+        <div id="notification-box" class="notification-box hidden">
+          <h3>🔔 Thông báo</h3>
+          <ul id="notification-list"></ul>
+        </div>
+      </div>
+      
       <div class="menu-bottom">
         <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
         <div class="menu-popup" id="menuPopup">
@@ -89,12 +100,13 @@
 
     </main>    
     <div id="overlay" class="overlay"></div>
+    <div id="notification-popup-container"></div>
 
   </div>
   <div id="avatarFullscreen" class="avatar-fullscreen"></div>
   <div class="overlay" id="menuOverlay"></div>
   <script src="authFetch.js"></script>
-  <script src="profile.js"></script>
+  <script type="module" src="profile.js"></script>
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.body?.setAttribute('data-theme', savedTheme);
