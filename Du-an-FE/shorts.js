@@ -1,4 +1,5 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+const socket = io(); // Kết nối với Socket.IO server
 
 document.addEventListener('DOMContentLoaded', () => {
   const currentTheme = loadThemeFromLocalStorage();
@@ -6,6 +7,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchShorts();
   handleUpload();
+  socket.on('new_short', (short) => {
+    renderShort(short, true);
+  
+    const toast = document.createElement('div');
+    toast.className = 'short-toast';
+    toast.innerText = '🔥 Có video mới được đăng!';
+    document.body.appendChild(toast);
+  
+    setTimeout(() => toast.remove(), 4000);
+  });
+  
 });
 
 // Lấy danh sách shorts từ server
@@ -22,32 +34,8 @@ async function fetchShorts() {
       return;
     }
 
-    shorts.forEach(short => {
-      const videoWrapper = document.createElement('div');
-      videoWrapper.className = 'short-video';
+    shorts.forEach(short => renderShort(short, false));
 
-      const createdDate = new Date(short.created_at);
-      const createdText = createdDate.toLocaleString('vi-VN', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-      
-      videoWrapper.innerHTML = `
-        <video src="${short.video_url}" controls muted preload="metadata"></video>
-        <div class="short-info">
-          <div class="username">@${short.username}</div>
-          <div class="created-at">Đã đăng vào ${createdText}</div>
-          <div class="caption">${short.caption || ''}</div>
-        </div>
-      `;
-      
-
-      container.appendChild(videoWrapper);
-
-      const separator = document.createElement('hr');
-      separator.className = 'video-separator';
-      container.appendChild(separator);
-    });
 
     setupAutoPlay();
   } catch (err) {
@@ -217,3 +205,41 @@ document.getElementById('searchBtn').addEventListener('click', () => {
     menuPopup.appendChild(themeToggleBtn);
   });
   
+
+
+// socket
+function renderShort(short, appendToTop = true) {
+  const container = document.getElementById('shortsViewer');
+
+  const videoWrapper = document.createElement('div');
+  videoWrapper.className = 'short-video';
+
+  const createdDate = new Date(short.created_at);
+  const createdText = createdDate.toLocaleString('vi-VN', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  videoWrapper.innerHTML = `
+    <video src="${short.video_url}" controls muted preload="metadata"></video>
+    <div class="short-info">
+      <div class="username">@${short.username}</div>
+      <div class="created-at">Đã đăng vào ${createdText}</div>
+      <div class="caption">${short.caption || ''}</div>
+    </div>
+  `;
+
+  const separator = document.createElement('hr');
+  separator.className = 'video-separator';
+
+  if (appendToTop) {
+    container.prepend(separator);
+    container.prepend(videoWrapper);
+  } else {
+    container.appendChild(videoWrapper);
+    container.appendChild(separator);
+  }
+
+  // Đảm bảo autoplay được áp dụng
+  setupAutoPlay();
+}

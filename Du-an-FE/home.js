@@ -30,26 +30,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const res = await authFetch('/api/notify');
       const notifies = await res.json();
+      console.log("📬 Thông báo nhận được:", notifies); // 👈 THÊM DÒNG NÀY
   
-      // Dùng bộ nhớ tạm để không lặp lại popup cũ
       if (!window.shownNotifications) window.shownNotifications = new Set();
   
       if (notifies.length > 0) {
         const latestNotify = notifies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
       
         if (!window.shownNotifications.has(latestNotify.id)) {
+          console.log("🔔 Gọi showPopup với nội dung:", latestNotify.content); // 👈 THÊM DÒNG NÀY
           showPopup(latestNotify.content);
           window.shownNotifications.add(latestNotify.id);
         }
-      }      
+      }
     } catch (err) {
       console.error('Không thể lấy thông báo:', err);
     }
   }
   
+  
   function showPopup(msg) {
+    console.log("📢 showPopup đang chạy với message:", msg); // thêm dòng này
     showToast(msg, { icon: '📢', bgColor: '#444' });
   }
+  
   
   
 
@@ -60,9 +64,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const [postsRes, likedRes, , likeCountRes] = await Promise.all([
       authFetch('/api/posts'),
       authFetch('/api/posts/liked'),
-      authFetch('/api/notify/public'), // giữ nguyên để fetch thông báo
+      authFetch('/api/notify'), // giữ nguyên để fetch thông báo
       authFetch('/api/likes/count'),
-      authFetch('/api/notify/'), // giữ nguyên để fetch thông báo
+      authFetch('/api/notify'), // giữ nguyên để fetch thông báo
 
     ]);
     
@@ -710,6 +714,81 @@ socket.on("new-like-notification", async (noti) => {
   }
   await fetchNotifications();
 });
+
+
+function showToast(message, options = {}) {
+  const {
+    icon = '🔔',
+    duration = 6000,
+    bgColor = 'rgba(50, 50, 50, 0.6)', // nền bán trong suốt
+    textColor = '#fff'
+  } = options;
+
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    Object.assign(container.style, {
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      zIndex: '9999',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px',
+    });
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'modern-toast';
+  toast.innerHTML = `
+    <div class="toast-body">
+      <span class="toast-icon">${icon}</span>
+      <span class="toast-message">${message}</span>
+    </div>
+  `;
+
+  Object.assign(toast.style, {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    backgroundColor: bgColor,
+    color: textColor,
+    padding: '10px 16px',
+    borderRadius: '12px',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
+    fontSize: '14px',
+    maxWidth: '300px',
+    opacity: '0',
+    transform: 'translateY(-10px)',
+    transition: 'opacity 0.4s ease, transform 0.4s ease',
+  });
+
+  container.appendChild(toast);
+
+  // Icon style
+  toast.querySelector('.toast-icon').style.fontSize = '18px';
+  toast.querySelector('.toast-message').style.flex = '1';
+
+  // Animate IN (trượt từ trên xuống)
+  setTimeout(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+  }, 50); // delay nhỏ để mượt hơn
+
+  // Auto remove
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => toast.remove(), 400);
+  }, duration);
+}
+
+
+
 
 
 

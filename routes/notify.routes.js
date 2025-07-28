@@ -5,7 +5,7 @@ const { getNotifications } = require('../controllers/notify.controller');
 const { authenticateToken } = require('../middleware/auth');
 
 // ✅ Route công khai (không cần login)
-router.get('/public', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT * FROM notifications ORDER BY created_at DESC LIMIT 10'
@@ -17,7 +17,6 @@ router.get('/public', async (req, res) => {
   }
 });
 
-// ✅ Route cần token
-router.get('/', authenticateToken, getNotifications);
+
 
 module.exports = router;

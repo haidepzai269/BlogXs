@@ -23,7 +23,13 @@ const notificationRoutes = require('./routes/notification.routes');
 
 
 const app = express();
-
+app.use((req, res, next) => {
+  const io = app.get('io'); // lấy io đã gán trong server.js
+  if (io) {
+    req.io = io;
+  }
+  next();
+});
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -50,7 +56,7 @@ app.use('/api/users', userHoverRoutes); // hoặc route khác, nếu bạn muố
 app.use('/api/shorts', shortsRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/notify', notifyRoutes);
-app.use('/api/notify/public', notifyRoute);
+app.use('/api/notify', notifyRoute);
 app.use('/api/notification', notificationRoutes);
 
 module.exports = app;

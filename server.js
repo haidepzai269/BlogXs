@@ -35,7 +35,11 @@ io.on('connection', (socket) => {
     }
   });
 });
-
+// Gắn io vào mọi request
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 // Export để controller có thể dùng
 app.set('io', io);
 app.set('onlineUsers', onlineUsers);

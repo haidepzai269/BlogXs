@@ -22,8 +22,17 @@ exports.uploadShort = async (req, res) => {
     `;
     const values = [userId, result.secure_url, caption || null];
     const { rows } = await pool.query(insertQuery, values);
+    const newShort = rows[0];
 
-    res.status(201).json(rows[0]);
+    // Lấy thông tin username của người đăng
+    const userRes = await pool.query(`SELECT username FROM users WHERE id = $1`, [userId]);
+    newShort.username = userRes.rows[0].username;
+
+    // Emit sự kiện socket tới client
+    const io = req.io; // đã được gán trong middleware hoặc server.js
+    io.emit('new_short', newShort); // gửi tới tất cả client
+
+    res.status(201).json(newShort);
   } catch (err) {
     console.error('❌ Upload short failed:', err);
     res.status(500).json({ message: 'Lỗi máy chủ khi upload short' });
