@@ -53,19 +53,43 @@ exports.likePost = async (req, res) => {
       [userId, postId]
     );
     await pool.query(
-      'INSERT INTO notify (sender_id, receiver_id, post_id, type) VALUES ($1, $2, $3, $4)',
-      [userId, receiverId, postId, 'like']
+      'INSERT INTO post_like_notifications (sender_id, receiver_id, post_id) VALUES ($1, $2, $3)',
+      [userId, receiverId, postId]
     );
+    
+    const { rows: postInfoRows } = await pool.query(
+      'SELECT content FROM posts WHERE id = $1',
+      [postId]
+    );
+    
+    let postContent = 'bài viết';
+    
+    if (postInfoRows.length > 0 && postInfoRows[0].content) {
+      postContent = postInfoRows[0].content;
+    }
+    
+    console.log("🧾 postContent =", postContent);
+    
 
     // Gửi thông báo qua Socket nếu người nhận đang online
     if (onlineUsers.has(receiverId)) {
       const receiverSocketId = onlineUsers.get(receiverId);
-      io.to(receiverSocketId).emit('new-like-notification', {
+      // likes.controller.js
+      console.log('🎯 Gửi socket đến người nhận:', {
+        receiverId,
+        receiverSocketId,
         senderUsername,
         postId,
-        type: 'like',
-        createdAt: new Date()
       });
+      io.to(`user_${receiverId}`).emit('new-like-notification', {
+        id: insertedNotification.rows[0].id,
+        sender_username: senderUsername,
+        postId,
+        post: postContent,
+        createdAt: new Date(),
+        is_read: false
+      });
+
     }
 
 // Đếm lại tổng số lượt like sau khi đã insert
@@ -124,9 +148,10 @@ exports.unlikePost = async (req, res) => {
 
     // Xoá notify nếu cần
     await pool.query(
-      'DELETE FROM notify WHERE sender_id = $1 AND post_id = $2 AND type = $3',
-      [userId, postId, 'like']
+      'DELETE FROM post_like_notifications WHERE sender_id = $1 AND post_id = $2',
+      [userId, postId]
     );
+    
 
     // Gửi socket nếu muốn (optional)
     const io = req.app.get('io');

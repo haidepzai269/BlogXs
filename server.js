@@ -20,13 +20,10 @@ io.on('connection', (socket) => {
 
   socket.on('join', (userId) => {
     socket.join(`user_${userId}`);
-    console.log(`User ${userId} joined room user_${userId}`);
+    onlineUsers.set(userId, socket.id); // ✅ Gộp luôn
+    console.log(`✅ User ${userId} joined room user_${userId} with socket ${socket.id}`);
   });
-  // Lắng nghe user đăng nhập
-  socket.on('register', (userId) => {
-    onlineUsers.set(userId, socket.id);
-    console.log(`✅ User ${userId} connected with socket ${socket.id}`);
-  });
+  
 
   socket.on('disconnect', () => {
     for (let [userId, socketId] of onlineUsers.entries()) {

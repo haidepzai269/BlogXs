@@ -13,6 +13,7 @@ const shortsRoutes = require('./routes/shorts.routes');
 const commentRoutes = require('./routes/comment.routes');
 const notifyRoutes = require('./routes/notify.routes');
 const notifyRoute = require('./routes/notify.routes');
+const notificationRoutes = require('./routes/notification.routes');
 
 
 
@@ -50,7 +51,6 @@ app.use('/api/shorts', shortsRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/notify', notifyRoutes);
 app.use('/api/notify/public', notifyRoute);
-
-
+app.use('/api/notification', notificationRoutes);
 
 module.exports = app;

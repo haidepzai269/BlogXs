@@ -584,11 +584,21 @@ body {
   cursor: pointer;
   position: relative;
   color: white;
-}
+  transition: 0.2s ease;
 
+}
+#notificationBtn:hover{
+  background-color: #323232;
+  scale: calc(1.14);
+}
 .notification-icon {
   font-size: 24px;
+  transition: 0.2s ease;
 }
+.notification-icon:hover{
+  color:red;
+}
+
 
 .notification-count {
   position: absolute;
@@ -601,3 +611,82 @@ body {
   font-size: 12px;
   font-weight: bold;
 }
+
+.notification-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 360px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.15);
+  z-index: 9999;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.notification-popup .notification-item {
+  padding: 8px;
+  border-bottom: 1px solid #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.notification-popup .notification-item.unread {
+  font-weight: bold;
+  background-color: #1a1a1a;
+}
+
+.notification-popup .notification-item:hover {
+  background-color: #222;
+}
+
+.sender-name {
+  color: #1da1f2; /* xanh nước biển */
+  font-weight: bold;
+}
+.notification-item {
+  position: relative;
+  padding-right: 30px;
+}
+
+.notification-item {
+  position: relative;
+  padding-right: 30px; /* để tránh chữ đè vào nút ❌ */
+  margin-bottom: 8px;
+  background: #222;
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff;
+}
+
+.notification-content {
+  position: relative;
+  margin-right: 10px;
+}
+
+.delete-btn {
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 10px;
+  top: 2px;
+  right: 5px;
+  background: transparent;
+  border: none;
+  color: #aaa;           /* 🎯 Màu xám tinh tế */
+  font-size: 14px;       /* Nhỏ gọn hơn */
+  cursor: pointer;
+  opacity: 0.7;          /* Thêm độ mờ nhẹ để mềm mắt */
+  transition: color 0.2s ease, opacity 0.2s ease;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  color: #ff4d4d;        /* Đỏ nhẹ khi hover */
+  opacity: 1;
+}
+
+

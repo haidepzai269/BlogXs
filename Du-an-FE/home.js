@@ -1,41 +1,18 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
 const socket = io(); // auto lấy host hiện tại (nếu backend chạy cùng domain)
 const currentUserId = localStorage.getItem('userId'); // hoặc cách bạn lấy ID người dùng
+console.log("🧠 currentUserId từ localStorage:", currentUserId);
+socket.on('connect', () => {
+  console.log("🔌 Socket connected:", socket.id);
+  console.log("📨 Gửi sự kiện join với userId:", currentUserId);
+  if (currentUserId) {
+    socket.emit('join', currentUserId);
+  }
+});
 
-function showToast(message, options = {}) {
-  const {
-    icon = '🔔',
-    duration = 4000,
-    bgColor = '#323232',
-    textColor = '#fff'
-  } = options;
-
-  const toastContainer = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.style.backgroundColor = bgColor;
-  toast.style.color = textColor;
-
-  toast.innerHTML = `
-    <span class="toast-icon">${icon}</span>
-    <span class="toast-message">${message}</span>
-    <span class="toast-close">&times;</span>
-  `;
-
-  toast.querySelector('.toast-close').onclick = () => removeToast(toast);
-
-  toastContainer.appendChild(toast);
-
-  setTimeout(() => removeToast(toast), duration);
-}
-
-function removeToast(toast) {
-  toast.style.animation = 'slideOut 0.4s forwards';
-  setTimeout(() => {
-    toast.remove();
-  }, 400);
-}
-
+document.addEventListener("DOMContentLoaded", () => {
+  fetchNotifications(); // ✅ Gọi API ban đầu
+});
 
 document.addEventListener('DOMContentLoaded', async () => {
   const currentTheme = loadThemeFromLocalStorage();
@@ -47,9 +24,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const overlay = document.getElementById('menuOverlay');
   const popup = document.getElementById('userPopup');
   // 👉 THÊM Ở ĐÂY:
-  setInterval(fetchNotifications, 1000); // mỗi 1 giây
+  setInterval(pollNotifyPopup, 1000); // mỗi 1 giây
 
-  async function fetchNotifications() {
+  async function pollNotifyPopup() {
     try {
       const res = await authFetch('/api/notify');
       const notifies = await res.json();
@@ -518,6 +495,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+function attachLikeHandler(likeBtn) {
+  likeBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    const postId = btn.dataset.postId;
+    const liked = btn.classList.contains('liked');
+
+    try {
+      if (liked) {
+        const res = await authFetch(`/api/posts/${postId}/like`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Không unlike được');
+        btn.classList.remove('liked');
+        btn.textContent = '🤍';
+      } else {
+        const res = await authFetch(`/api/posts/${postId}/like`, {
+          method: 'POST',
+        });
+        if (!res.ok) throw new Error('Không like được');
+        btn.classList.add('liked');
+        btn.textContent = '❤️';
+      }
+    } catch (err) {
+      console.error('❌ Lỗi khi like/unlike:', err.message);
+      alert('Không thể thực hiện hành động. Vui lòng thử lại!');
+    }
+  });
+}
 
 socket.on('new_post', (post) => {
   prependPost(post);
@@ -539,8 +545,12 @@ function prependPost(post) {
     </div>
   `;
 
+  const likeBtn = postEl.querySelector('.like-btn'); // ✅ move here
+  attachLikeHandler(likeBtn);
+
   postsContainer.prepend(postEl);
 }
+
 
 
 // comment io
@@ -589,10 +599,117 @@ socket.on('like_updated', ({ postId, likeCount }) => {
 
 
 
-if (currentUserId) {
-  socket.emit('join', currentUserId);
+socket.on('connect', () => {
+  if (currentUserId) {
+    console.log("📡 Emit join room với userId:", currentUserId);
+    socket.emit('join', currentUserId);
+  }
+});
+
+
+
+
+
+
+
+
+
+const notificationBtn = document.getElementById("notificationBtn");
+const notificationPopup = document.getElementById("notificationPopup");
+const notificationCount = document.getElementById("notificationCount");
+
+let notifications = [];
+
+notificationBtn.addEventListener("click", () => {
+  notificationPopup.style.display = notificationPopup.style.display === "none" ? "block" : "none";
+
+  if (notifications.some(n => !n.is_read)) {
+    markAllNotificationsAsRead();
+  }
+})  
+
+async function fetchNotifications() {
+  try {
+    const res = await authFetch("/api/notification");
+    const data = await res.json();
+    notifications = data.notifications; // ✅ Lấy mảng thông báo đúng
+    renderNotifications();
+  } catch (err) {
+    console.error("Lỗi khi lấy thông báo", err);
+  }
 }
 
-socket.on('notify', (data) => {
-  showToast(data.message, { icon: '❤️', duration: 5000 });
+
+function renderNotifications() {
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
+  if (unreadCount > 0) {
+    notificationCount.style.display = "inline-block";
+    notificationCount.innerText = unreadCount;
+  } else {
+    notificationCount.style.display = "none";
+  }
+
+  notificationPopup.innerHTML = notifications.map(n => `
+    <div class="notification-item ${n.is_read ? "" : "unread"}">
+      <div class="notification-content">
+        🔥 <span class="sender-name">${n.sender_username || "Ai đó"}</span> đã thích bài viết "${n.post ?? '[Không có nội dung]'}" của bạn
+      </div>
+              <button class="delete-btn" data-id="${n.id}">X</button> 
+    </div>
+  `).join("");
+  
+   // Gán sự kiện xoá cho từng nút ❌
+   document.querySelectorAll('.delete-btn').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = e.currentTarget.dataset.id;
+  
+      try {
+        const res = await authFetch(`/api/notification/${id}`, {
+          method: 'DELETE'
+        });
+  
+        if (res.ok) {
+          // Cập nhật lại giao diện
+          notifications = notifications.filter(n => n.id !== parseInt(id));
+          renderNotifications();
+        } else {
+          console.error('❌ Không thể xóa thông báo:', res.status);
+        }
+      } catch (err) {
+        console.error('❌ Lỗi khi gọi authFetch để xóa:', err);
+      }
+    });
+  });
+  
+}
+
+
+async function markAllNotificationsAsRead() {
+  try {
+    await authFetch("/api/notification/read", { method: "PUT" });
+    notifications = notifications.map(n => ({ ...n, is_read: true }));
+    renderNotifications();
+  } catch (err) {
+    console.error("Lỗi khi đánh dấu đã đọc", err);
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  fetchNotifications();
 });
+
+socket.on("new-like-notification", async (noti) => {
+  try {
+    console.log("📥 Nhận thông báo mới:", noti);
+    
+    // Gọi lại API để đảm bảo luôn đúng định dạng
+    await fetchNotifications(); // Gọi lại renderNotifications() bên trong
+  } catch (e) {
+    console.error("❌ Lỗi xử lý notify:", e);
+  }
+  await fetchNotifications();
+});
+
+
+
