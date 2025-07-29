@@ -1,3 +1,7 @@
+import { initI18n } from './i18n.js';
+
+
+
 function applyTheme(theme) {
   document.body.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
@@ -162,4 +166,8 @@ document.addEventListener('click', (e) => {
       suggestionList.classList.remove('hide');
     }, 300);
   }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  initI18n();
 });

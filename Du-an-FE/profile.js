@@ -1,5 +1,8 @@
 // Hàm applyTheme như search.js
 import io from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+import { initI18n } from './i18n.js';
+
+
 
 
 
@@ -373,4 +376,9 @@ document.getElementById('notification-bell').addEventListener('click', async () 
 
   // Ẩn dấu đỏ
   document.getElementById('notification-badge').style.display = 'none';
+});
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  initI18n();
 });

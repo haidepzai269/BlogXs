@@ -1,4 +1,7 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+import { initI18n } from './i18n.js';
+
+
 
 const socket = io(); // auto lấy host hiện tại (nếu backend chạy cùng domain)
 const currentUserId = localStorage.getItem('userId'); // hoặc cách bạn lấy ID người dùng
@@ -793,6 +796,7 @@ function showToast(message, options = {}) {
 }
 
 
-
-
-
+// ==== Load ngôn ngữ từ file lang/{lang}.json và cập nhật DOM ====
+window.addEventListener('DOMContentLoaded', () => {
+  initI18n();
+});

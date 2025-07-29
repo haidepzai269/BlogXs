@@ -14,29 +14,41 @@
   <div class="container">
     <!-- Sidebar -->
     <nav class="sidebar">
-      <button title="Trang chủ" onclick="goToHome()"><i class="ph ph-house sidebar-icon"></i></button>
-      <button title="Tìm kiếm" onclick="goToSearch()"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
-      <button title="Tạo bài đăng"><i class="ph ph-plus sidebar-icon" style="color: #1da1f2;"></i></button>
-      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
-      <button title="Đã thích" onclick="goToLike()"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
-      <button title="Short Video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
-      <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
-        <div class="menu-popup" id="menuPopup">
-          <!-- Các nút sẽ được JS thêm vào -->
+      <button data-i18n-title="home" onclick="goToHome()" id="homeBtn"><i class="ph ph-house sidebar-icon"></i></button>
+      <button data-i18n-title="search" onclick="goToSearch()" id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button data-i18n-title="create_post"><i class="ph ph-plus sidebar-icon" style="color: #1da1f2;"></i></button>
+      <button data-i18n-title="profile" onclick="goToProfile()" id="profileBtn"><i class="ph ph-user sidebar-icon"></i></button>
+      <button data-i18n-title="liked" onclick="goToLike()" id="likeBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
+      <button data-i18n-title="short_video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <div class="settings-wrapper">
+        <button id="settingsBtn" class="sidebar-icon" data-i18n-title="settings">
+         ⚙️
+        </button>
+       <div id="settingsDropdown" class="settings-dropdown hidden">
+        <div class="language-options">
+          <button data-lang="vi">🇻🇳 Tiếng Việt</button>
+          <button data-lang="en">🇺🇸 English</button>
+          <button data-lang="china">🇨🇳 中文</button>
+          <button data-lang="ja">🇯🇵 日本語</button>
         </div>
+        </div>
+     </div>
+
+      <div class="menu-bottom">
+        <button  id="menuToggle" data-i18n-title="menu"><i class="ph ph-list sidebar-icon"></i></button>
+        <div class="menu-popup" id="menuPopup"></div>
       </div>
       <div class="logout-button">
-        <button class="sidebar-icon" title="Đăng xuất" onclick="logout()">⏻</button>
+        <button   class="sidebar-icon" onclick="logout()" data-i18n-title="logout">⏻</button>
       </div>
     </nav>
 
     <!-- Main Content -->
     <main class="content">
-      <h1>Tạo bài đăng mới</h1>
+      <h1 data-i18n="create_title">Tạo bài đăng mới</h1>
       <form id="createPostForm" class="create-post-form">
         <textarea name="content" id="postContent" rows="6" placeholder="Bạn đang nghĩ gì?"></textarea>
-        <button type="submit">Đăng bài</button>
+        <button data-i18n="create_submit" type="submit">Đăng bài</button>
       </form>
       <p id="postMessage" class="status-message"></p>
     </main>
@@ -62,7 +74,7 @@
   <div id="logoContainer"></div>
   <canvas id="fireworksCanvas"></canvas>  
   <script src="authFetch.js"></script>
-  <script  src="create.js"></script>
+  <script type="module" src="create.js"></script>
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.body?.setAttribute('data-theme', savedTheme);

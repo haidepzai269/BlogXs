@@ -1,3 +1,7 @@
+import { initI18n } from './i18n.js';
+
+
+
 // Hàm applyTheme như search.js
 function applyTheme(theme) {
   document.body.setAttribute('data-theme', theme);
@@ -64,6 +68,18 @@ function logout() {
   }
   document.getElementById('shortBtn').addEventListener('click', () => {
     window.location.href = 'shorts.html';
+  });
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    window.location.href = 'home.html';
+  });
+  document.getElementById('profileBtn').addEventListener('click', () => {
+    window.location.href = 'profile.html';
+  });
+  document.getElementById('likeBtn').addEventListener('click', () => {
+    window.location.href = 'like.html';
+  });
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    window.location.href = 'search.html';
   });
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -175,4 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   observer.observe(popup, { attributes: true, attributeFilter: ['class'] });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  initI18n();
 });

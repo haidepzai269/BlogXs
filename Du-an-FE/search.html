@@ -16,29 +16,41 @@
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button title="Trang chủ" onclick="window.location.href='home.html'"><i class="ph ph-house sidebar-icon"></i></button>
-      <button title="Tìm kiếm" class="active"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
-      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus sidebar-icon" ></i></button>
-      <button title="Hồ sơ cá nhân" id="profileBtn" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
-      <button title="Đã thích " id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
-      <button title="Short Video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
-      <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
-        <div class="menu-popup" id="menuPopup">
-          <!-- Các nút sẽ được JS thêm vào -->
+      <button data-i18n-title="home" onclick="window.location.href='home.html'"><i class="ph ph-house sidebar-icon"></i></button>
+      <button data-i18n-title="search" class="active"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button data-i18n-title="create_post" id="createBtn"><i class="ph ph-plus sidebar-icon" ></i></button>
+      <button data-i18n-title="profile" id="profileBtn" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
+      <button data-i18n-title="liked" id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
+      <button data-i18n-title="short_video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <div class="settings-wrapper">
+        <button id="settingsBtn" class="sidebar-icon" data-i18n-title="settings">
+         ⚙️
+        </button>
+       <div id="settingsDropdown" class="settings-dropdown hidden">
+        <div class="language-options">
+          <button data-lang="vi">🇻🇳 Tiếng Việt</button>
+          <button data-lang="en">🇺🇸 English</button>
+          <button data-lang="china">🇨🇳 中文</button>
+          <button data-lang="ja">🇯🇵 日本語</button>
         </div>
+        </div>
+     </div>
+
+      <div class="menu-bottom">
+        <button  id="menuToggle" data-i18n-title="menu"><i class="ph ph-list sidebar-icon"></i></button>
+        <div class="menu-popup" id="menuPopup"></div>
       </div>
       <div class="logout-button">
-        <button title="Đăng xuất" class="sidebar-icon" onclick="logout()">⏻</button>
+        <button   class="sidebar-icon" onclick="logout()" data-i18n-title="logout">⏻</button>
       </div>
     </nav>
 
     <main class="content">
-      <h1>🔍 Tìm kiếm bài viết</h1>
+      <h1 data-i18n="search_title">🔍 Tìm kiếm bài viết</h1>
       <div class="search-wrapper">
         <div class="ripple-container search-bar">
           <input type="text" id="searchInput" placeholder=" " autocomplete="off" />
-          <div class="animated-placeholder">Nhập từ khóa để tìm...</div>
+          <div data-i18n="search_content" class="animated-placeholder">Nhập từ khóa để tìm...</div>
           <i class="ph ph-magnifying-glass search-icon"></i>
         </div>
         <ul id="suggestionList" class="suggestion-list"></ul> <!-- Gợi ý nằm dưới input -->
@@ -54,7 +66,7 @@
   🔊</button>
   <div class="overlay" id="menuOverlay"></div>
   <script src="authFetch.js"></script>
-  <script src="search.js"></script>
+  <script type="module" src="search.js"></script>
   <script>
     const btn = document.getElementById("toggleMusicBtn");
     btn.addEventListener("click", () => {

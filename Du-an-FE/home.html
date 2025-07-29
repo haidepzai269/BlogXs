@@ -10,31 +10,46 @@
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button title="Trang chủ"><i class="ph ph-house sidebar-icon"></i></button>
-      <button title="Tìm kiếm" id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
-      <button title="Tạo bài đăng" id="createBtn"><i class="ph ph-plus sidebar-icon"></i></button>
-      <button title="Hồ sơ cá nhân" onclick="goToProfile()"><i class="ph ph-user sidebar-icon"></i></button>
-      <button title="Đã thích" id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
-      <button title="Short Video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <button data-i18n-title="home"><i class="ph ph-house sidebar-icon"></i></button>
+      <button id="searchBtn" data-i18n-title="search"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button id="createBtn" data-i18n-title="create_post"><i class="ph ph-plus sidebar-icon"></i></button>
+      <button onclick="goToProfile()" data-i18n-title="profile"><i class="ph ph-user sidebar-icon"></i></button>
+      <button id="heartBtn" data-i18n-title="liked"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
+      <button id="shortBtn" data-i18n-title="short_video"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <!-- Cài đặt ngôn ngữ -->
+     <div class="settings-wrapper">
+        <button id="settingsBtn" class="sidebar-icon" data-i18n-title="settings">
+         ⚙️
+        </button>
+       <div id="settingsDropdown" class="settings-dropdown hidden">
+        <div class="language-options">
+          <button data-lang="vi">🇻🇳 Tiếng Việt</button>
+          <button data-lang="en">🇺🇸 English</button>
+          <button data-lang="china">🇨🇳 中文</button>
+          <button data-lang="ja">🇯🇵 日本語</button>
+        </div>
+        </div>
+     </div>
+
       <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
+        <button  id="menuToggle" data-i18n-title="menu"><i class="ph ph-list sidebar-icon"></i></button>
         <div class="menu-popup" id="menuPopup"></div>
       </div>
       <div class="logout-button">
-        <button title="Đăng xuất"  class="sidebar-icon" onclick="logout()">⏻</button>
+        <button   class="sidebar-icon" onclick="logout()" data-i18n-title="logout">⏻</button>
       </div>
     </nav>
     
 
     <main class="content">
-      <h1>Trang chủ - Xem bài đăng</h1>
+      <h1 data-i18n="page_title">Trang chủ - Xem bài đăng</h1>
       <!-- Các bài đăng sẽ được render ở đây -->
       <div id="postsContainer" class="posts"></div>
 
     </main>
     <!-- Nút thông báo giống YouTube -->
         <div class="notification-wrapper">
-            <button class="sidebar-icon" id="notificationBtn" title="Thông báo">
+            <button class="sidebar-icon" id="notificationBtn" data-i18n-title="notifications">
               <i class="ph ph-bell notification-icon "></i>
             <span id="notificationCount" class="notification-count" style="display: none;">0</span>
            </button>

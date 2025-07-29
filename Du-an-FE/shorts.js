@@ -1,4 +1,8 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+import { initI18n } from './i18n.js';
+
+
+
 const socket = io(); // Kết nối với Socket.IO server
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -243,3 +247,7 @@ function renderShort(short, appendToTop = true) {
   // Đảm bảo autoplay được áp dụng
   setupAutoPlay();
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  initI18n();
+});

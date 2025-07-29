@@ -11,31 +11,33 @@
 <body>
   <div class="container">
     <nav class="sidebar">
-      <button id="homeBtn"><i class="ph ph-house sidebar-icon"></i></button>
-      <button id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
-      <button id="createBtn"><i class="ph ph-plus sidebar-icon"></i></button>
-      <button class="active"><i class="ph ph-user sidebar-icon"></i></button>
-      <button id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
-      <button title="Short Video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
-      <div class="notification-wrapper">
-        <button id="notification-bell" title="Thông báo">
-          <i class="ph ph-bell sidebar-icon"></i>
-          <span id="notification-badge" style="display: none;">🔴</span>
+      <button data-i18n-title="home" id="homeBtn"><i class="ph ph-house sidebar-icon"></i></button>
+      <button  data-i18n-title="search" id="searchBtn"><i class="ph ph-magnifying-glass sidebar-icon"></i></button>
+      <button data-i18n-title="create_post" id="createBtn"><i class="ph ph-plus sidebar-icon"></i></button>
+      <button data-i18n-title="profile" class="active"><i class="ph ph-user sidebar-icon"></i></button>
+      <button data-i18n-title="liked" id="heartBtn"><i class="ph ph-thumbs-up sidebar-icon"></i></button>
+      <button data-i18n-title="short_video" id="shortBtn"><i class="ph ph-film-strip sidebar-icon"></i></button>
+      <!-- Cài đặt ngôn ngữ -->
+      <div class="settings-wrapper">
+        <button id="settingsBtn" class="sidebar-icon" data-i18n-title="settings">
+         ⚙️
         </button>
-        <div id="notification-box" class="notification-box hidden">
-          <h3>🔔 Thông báo</h3>
-          <ul id="notification-list"></ul>
+       <div id="settingsDropdown" class="settings-dropdown hidden">
+        <div class="language-options">
+          <button data-lang="vi">🇻🇳 Tiếng Việt</button>
+          <button data-lang="en">🇺🇸 English</button>
+          <button data-lang="china">🇨🇳 中文</button>
+          <button data-lang="ja">🇯🇵 日本語</button>
         </div>
-      </div>
-      
+        </div>
+     </div>
+
       <div class="menu-bottom">
-        <button title="Menu" id="menuToggle"><i class="ph ph-list sidebar-icon"></i></button>
-        <div class="menu-popup" id="menuPopup">
-          <!-- Các nút sẽ được JS thêm vào -->
-        </div>
+        <button  id="menuToggle" data-i18n-title="menu"><i class="ph ph-list sidebar-icon"></i></button>
+        <div class="menu-popup" id="menuPopup"></div>
       </div>
       <div class="logout-button">
-        <button class="sidebar-icon"  onclick="logout()">⏻</button>
+        <button   class="sidebar-icon" onclick="logout()" data-i18n-title="logout">⏻</button>
       </div>
     </nav>
 
@@ -60,7 +62,7 @@
          </label>
      </div>
       <div class="profile-info">
-        <button class="edit-btn">Chỉnh sửa hồ sơ</button>
+        <button data-i18n-title="setting" class="edit-btn">Chỉnh sửa hồ sơ</button>
         <h2 class="name">Hải Nguyễn Hoàng <i class="ph-fill ph-lock"></i></h2>
         <p class="username">@HiNguyenHon62692</p>
       </div>
