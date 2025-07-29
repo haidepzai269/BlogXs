@@ -834,3 +834,13 @@ body {
 .hidden {
   display: none;
 }
+
+
+.empty-message {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  font-style: italic;
+  opacity: 0.8;
+}

@@ -741,28 +741,36 @@ function renderNotifications() {
     notificationCount.style.display = "none";
   }
 
+  // Nếu không có thông báo
+  if (notifications.length === 0) {
+    notificationPopup.innerHTML = `
+      <div class="empty-message">Không có thông báo mới</div>
+    `;
+    return;
+  }
+
+  // Có thông báo → render danh sách
   notificationPopup.innerHTML = notifications.map(n => `
     <div class="notification-item ${n.is_read ? "" : "unread"}">
       <div class="notification-content">
         🔥 <span class="sender-name">${n.sender_username || "Ai đó"}</span> đã thích bài viết "${n.post ?? '[Không có nội dung]'}" của bạn
       </div>
-              <button class="delete-btn" data-id="${n.id}">X</button> 
+      <button class="delete-btn" data-id="${n.id}">X</button> 
     </div>
   `).join("");
-  
-   // Gán sự kiện xoá cho từng nút ❌
-   document.querySelectorAll('.delete-btn').forEach((btn) => {
+
+  // Gán sự kiện xoá
+  document.querySelectorAll('.delete-btn').forEach((btn) => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       const id = e.currentTarget.dataset.id;
-  
+
       try {
         const res = await authFetch(`/api/notification/${id}`, {
           method: 'DELETE'
         });
-  
+
         if (res.ok) {
-          // Cập nhật lại giao diện
           notifications = notifications.filter(n => n.id !== parseInt(id));
           renderNotifications();
         } else {
@@ -773,8 +781,8 @@ function renderNotifications() {
       }
     });
   });
-  
 }
+
 
 
 async function markAllNotificationsAsRead() {
