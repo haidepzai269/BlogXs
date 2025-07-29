@@ -19,10 +19,12 @@ io.on('connection', (socket) => {
   console.log('Socket connected:', socket.id);
 
   socket.on('join', (userId) => {
-    socket.join(`user_${userId}`);
-    onlineUsers.set(userId, socket.id); // ✅ Gộp luôn
-    console.log(`✅ User ${userId} joined room user_${userId} with socket ${socket.id}`);
+    const uid = String(userId); // ✅ luôn là chuỗi
+    socket.join(`user_${uid}`);
+    onlineUsers.set(uid, socket.id); // Key nhất quán
+    console.log(`✅ User ${uid} joined room user_${uid} with socket ${socket.id}`);
   });
+  
   
 
   socket.on('disconnect', () => {

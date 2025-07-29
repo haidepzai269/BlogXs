@@ -1,4 +1,5 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
+
 const socket = io(); // auto lấy host hiện tại (nếu backend chạy cùng domain)
 const currentUserId = localStorage.getItem('userId'); // hoặc cách bạn lấy ID người dùng
 console.log("🧠 currentUserId từ localStorage:", currentUserId);
@@ -9,10 +10,14 @@ socket.on('connect', () => {
     socket.emit('join', currentUserId);
   }
 });
-
 document.addEventListener("DOMContentLoaded", () => {
-  fetchNotifications(); // ✅ Gọi API ban đầu
+  window.notificationCount = document.querySelector('#notificationCount');
+  window.notificationPopup = document.querySelector('#notificationPopup');
+  fetchNotifications();
 });
+
+
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const currentTheme = loadThemeFromLocalStorage();
@@ -786,7 +791,6 @@ function showToast(message, options = {}) {
     setTimeout(() => toast.remove(), 400);
   }, duration);
 }
-
 
 
 

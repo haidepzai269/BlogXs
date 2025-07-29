@@ -5,7 +5,6 @@ exports.likePost = async (req, res) => {
   const postId = req.params.postId;
 
   try {
-    // Lấy user_id của người đăng bài
     const { rows: postRows } = await pool.query(
       'SELECT user_id FROM posts WHERE id = $1',
       [postId]
@@ -16,8 +15,8 @@ exports.likePost = async (req, res) => {
     }
 
     const receiverId = postRows[0].user_id;
+    const receiverKey = String(receiverId);
 
-    // Kiểm tra đã like chưa
     const { rows: likeRows } = await pool.query(
       'SELECT * FROM likes WHERE user_id = $1 AND post_id = $2',
       [userId, postId]
@@ -26,7 +25,6 @@ exports.likePost = async (req, res) => {
     const io = req.app.get('io');
     const onlineUsers = req.app.get('onlineUsers');
 
-    // Lấy tên người gửi
     const { rows: senderRows } = await pool.query(
       'SELECT username FROM users WHERE id = $1',
       [userId]
@@ -34,84 +32,93 @@ exports.likePost = async (req, res) => {
     const senderUsername = senderRows[0]?.username || 'Unknown';
 
     if (likeRows.length > 0) {
-      // Nếu đã like → unlike
       await pool.query(
         'DELETE FROM likes WHERE user_id = $1 AND post_id = $2',
         [userId, postId]
       );
-      await pool.query(
-        'DELETE FROM notify WHERE sender_id = $1 AND post_id = $2 AND type = $3',
-        [userId, postId, 'like']
-      );
+
+      if (userId !== receiverId) {
+        await pool.query(
+          'DELETE FROM post_like_notifications WHERE sender_id = $1 AND post_id = $2',
+          [userId, postId]
+        );
+      }
 
       return res.status(200).json({ message: 'Unliked' });
     }
 
-    // Nếu chưa like → like
     await pool.query(
       'INSERT INTO likes (user_id, post_id) VALUES ($1, $2)',
       [userId, postId]
     );
-    await pool.query(
-      'INSERT INTO post_like_notifications (sender_id, receiver_id, post_id) VALUES ($1, $2, $3)',
-      [userId, receiverId, postId]
-    );
-    
-    const { rows: postInfoRows } = await pool.query(
-      'SELECT content FROM posts WHERE id = $1',
+
+    // 🔒 Chỉ tạo thông báo nếu user khác người đăng
+    if (userId !== receiverId) {
+      await pool.query(
+        'INSERT INTO post_like_notifications (sender_id, receiver_id, post_id) VALUES ($1, $2, $3)',
+        [userId, receiverId, postId]
+      );
+
+      const insertedNotification = await pool.query(
+        `SELECT id FROM post_like_notifications 
+         WHERE sender_id = $1 AND receiver_id = $2 AND post_id = $3 
+         ORDER BY created_at DESC LIMIT 1`,
+        [userId, receiverId, postId]
+      );
+
+      const { rows: postInfoRows } = await pool.query(
+        'SELECT content FROM posts WHERE id = $1',
+        [postId]
+      );
+
+      let postContent = 'bài viết';
+      if (postInfoRows.length > 0 && postInfoRows[0].content) {
+        postContent = postInfoRows[0].content;
+      }
+
+      // 👇 Gửi socket nếu online
+      if (onlineUsers.has(receiverKey)) {
+        const receiverSocketId = onlineUsers.get(receiverKey);
+        console.log('🎯 Gửi socket đến người nhận:', {
+          receiverId,
+          receiverSocketId,
+          senderUsername,
+          postId,
+        });
+
+        io.to(`user_${receiverKey}`).emit('new-like-notification', {
+          id: insertedNotification.rows[0].id,
+          sender_username: senderUsername,
+          postId,
+          post: postContent,
+          createdAt: new Date(),
+          is_read: false
+        });
+      }
+    }
+
+    // Đếm lại lượt like
+    const countRes = await pool.query(
+      'SELECT COUNT(*) FROM likes WHERE post_id = $1',
       [postId]
     );
-    
-    let postContent = 'bài viết';
-    
-    if (postInfoRows.length > 0 && postInfoRows[0].content) {
-      postContent = postInfoRows[0].content;
-    }
-    
-    console.log("🧾 postContent =", postContent);
-    
+    const likeCount = parseInt(countRes.rows[0].count);
 
-    // Gửi thông báo qua Socket nếu người nhận đang online
-    if (onlineUsers.has(receiverId)) {
-      const receiverSocketId = onlineUsers.get(receiverId);
-      // likes.controller.js
-      console.log('🎯 Gửi socket đến người nhận:', {
-        receiverId,
-        receiverSocketId,
-        senderUsername,
-        postId,
-      });
-      io.to(`user_${receiverId}`).emit('new-like-notification', {
-        id: insertedNotification.rows[0].id,
-        sender_username: senderUsername,
-        postId,
-        post: postContent,
-        createdAt: new Date(),
-        is_read: false
-      });
+    // Broadcast
+    io.emit('like_updated', {
+      postId: parseInt(postId),
+      likeCount
+    });
 
-    }
-
-// Đếm lại tổng số lượt like sau khi đã insert
-const countRes = await pool.query(
-  'SELECT COUNT(*) FROM likes WHERE post_id = $1',
-  [postId]
-);
-const likeCount = parseInt(countRes.rows[0].count);
-
-// Gửi realtime đến tất cả client
-io.emit('like_updated', {
-  postId: parseInt(postId),
-  likeCount
-});
-
-return res.status(200).json({ message: 'Liked', likeCount });
+    return res.status(200).json({ message: 'Liked', likeCount });
 
   } catch (err) {
     console.error('Lỗi khi like/unlike post:', err);
     return res.status(500).json({ error: 'Đã xảy ra lỗi khi xử lý like post' });
   }
 };
+
+
 
 
 exports.unlikePost = async (req, res) => {
