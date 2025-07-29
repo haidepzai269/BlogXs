@@ -70,6 +70,22 @@
 <!-- Đặt vào cuối <body> của home.html -->
   <div id="toastContainer" class="toast-container"></div>
 
+<!-- Hiệu ứng SVG viết chữ -->
+<div id="loginOverlay" class="overlay-blur hidden"></div>
+<div id="loginEffectSVG" class="svg-effect hidden">
+  <svg viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+          font-size="64" font-family="Pacifico, cursive" fill="none" stroke="#1da1f2"
+          stroke-width="2" class="svg-text">
+      BlogXs
+    </text>
+  </svg>
+</div>
+
+<!-- Canvas hiệu ứng vỡ sáng -->
+<canvas id="particlesCanvas" class="hidden"></canvas>
+
+
   <script src="authFetch.js"></script>
 
   <script type="module" src="home.js"></script>

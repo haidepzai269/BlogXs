@@ -65,7 +65,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
       localStorage.setItem('user', JSON.stringify(data.user || { email })); // lưu thông tin người dùng nếu có
       if (data.user && data.user.id) {
         localStorage.setItem('userId', data.user.id); // 👈 dòng thêm mới
-      }
+      }// 👇 THÊM FLAG để hiển thị hiệu ứng khi vào home.html
+       sessionStorage.setItem('justLoggedIn', 'true');
       window.location.href = 'home.html';
     } else {
       alert(data.message || 'Đăng nhập thất bại');

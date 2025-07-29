@@ -1,5 +1,84 @@
 import { applyTheme, loadThemeFromLocalStorage } from './theme.js';
 import { initI18n } from './i18n.js';
+document.addEventListener('DOMContentLoaded', () => {
+  const showEffect = sessionStorage.getItem('justLoggedIn');
+  const svgContainer = document.getElementById('loginEffectSVG');
+  const canvas = document.getElementById('particlesCanvas');
+  const overlay = document.getElementById('loginOverlay');
+
+  if (showEffect && svgContainer && canvas && overlay) {
+    svgContainer.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+    canvas.classList.add('hidden');
+
+    // Sau khi SVG chữ vẽ xong thì vỡ sáng
+    setTimeout(() => {
+      svgContainer.style.opacity = '0';
+      triggerParticleBurst(canvas);
+
+      // Ẩn overlay mờ sau hiệu ứng
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+        svgContainer.classList.add('hidden'); // ẩn hẳn SVG
+      }, 1500); // sau khi nổ hạt
+    }, 3500);
+
+    // Xoá cờ
+    sessionStorage.removeItem('justLoggedIn');
+  }
+});
+
+
+// =====================
+// 🎆 Hàm tạo hiệu ứng tia sáng
+// =====================
+function triggerParticleBurst(canvas) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.remove('hidden');
+  const ctx = canvas.getContext('2d');
+
+  const particles = [];
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2 - 60,
+      radius: Math.random() * 3 + 2,
+      color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+      angle: Math.random() * 2 * Math.PI,
+      speed: Math.random() * 5 + 2,
+      alpha: 1
+    });
+  }
+
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += Math.cos(p.angle) * p.speed;
+      p.y += Math.sin(p.angle) * p.speed;
+      p.alpha -= 0.02;
+      ctx.beginPath();
+      ctx.globalAlpha = Math.max(p.alpha, 0);
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+
+    if (particles.some(p => p.alpha > 0)) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.classList.add('hidden');
+    }
+  };
+
+  animate();
+}
+
+
 
 
 

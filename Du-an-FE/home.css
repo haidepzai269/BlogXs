@@ -1,4 +1,6 @@
 /* Reset */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -770,4 +772,65 @@ body {
   opacity: 0;
   pointer-events: none;
   transform: translateX(10px);
+}
+
+
+.svg-effect {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 120px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.svg-text {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawText 3s ease forwards, glowPulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px #1da1f2) drop-shadow(0 0 12px #1da1f2);
+}
+@keyframes glowPulse {
+  0% {
+    filter: drop-shadow(0 0 6px #1da1f2) drop-shadow(0 0 12px #1da1f2);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #1da1f2) drop-shadow(0 0 20px #1da1f2);
+  }
+  100% {
+    filter: drop-shadow(0 0 6px #1da1f2) drop-shadow(0 0 12px #1da1f2);
+  }
+}
+
+
+@keyframes drawText {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+#particlesCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+.overlay-blur {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* mờ nền */
+  backdrop-filter: blur(6px);
+  z-index: 8888; /* dưới hiệu ứng SVG, trên mọi thứ khác */
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.hidden {
+  display: none;
 }
