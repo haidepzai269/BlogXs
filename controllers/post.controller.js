@@ -2,6 +2,7 @@ const { indexPostToES, deletePostFromES } = require('../utils/syncElasticsearch'
 const { Client } = require('@elastic/elasticsearch');
 const client = require('../utils/elasticsearchClient');
 const db = require('../db');
+const sanitizeHtml = require('sanitize-html');
 
 // Lấy tất cả bài viết
 exports.getAllPosts = async (req, res) => {
@@ -90,7 +91,12 @@ exports.createPost = async (req, res) => {
   try {
     const userId = req.user.id;
     const username = req.user.username;
-    const { content } = req.body;
+    const rawContent = req.body.content;
+    const content = sanitizeHtml(rawContent, {
+      allowedTags: [], // hoặc ['b', 'i', 'a'] nếu muốn hỗ trợ HTML nhẹ
+      allowedAttributes: {}
+    });
+    
 
     if (!content || content.trim() === '') {
       return res.status(400).json({ error: 'Nội dung không được để trống' });

@@ -1,5 +1,6 @@
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const pool = require('../db'); // Kết nối PostgreSQL
+const sanitizeHtml = require('sanitize-html');
 
 // [POST] Upload video
 exports.uploadShort = async (req, res) => {
@@ -8,8 +9,12 @@ exports.uploadShort = async (req, res) => {
       return res.status(400).json({ message: 'Không có video được tải lên' });
     }
 
-    const { caption } = req.body;
-    const userId = req.user.id;
+    const rawCaption = req.body.caption || '';
+    const caption = sanitizeHtml(rawCaption, {
+      allowedTags: [],
+      allowedAttributes: {}
+    });
+        const userId = req.user.id;
 
     // Upload lên Cloudinary
     const result = await uploadToCloudinary(req.file.buffer, 'video');

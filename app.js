@@ -42,6 +42,10 @@ app.get('/', (req, res) => {
   });
 // Cấu hình public static folder
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.get('/post/:id', (req, res) => {
+  // Ví dụ render trang post-detail.html
+  res.sendFile(path.join(__dirname, './Du-an-FE/home.html'));
+});
 
 
 app.use('/api/auth', authRoutes);

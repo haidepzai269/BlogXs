@@ -22,7 +22,14 @@ exports.getCommentsByPost = async (req, res) => {
 // Tạo bình luận mới
 exports.createComment = async (req, res) => {
   const { postId } = req.params;
-  const { content } = req.body;
+  const sanitizeHtml = require('sanitize-html');
+
+  const rawContent = req.body.content;
+  const content = sanitizeHtml(rawContent, {
+    allowedTags: [], // Cho phép tag nào bạn muốn, hoặc [] là chặn hết
+    allowedAttributes: {} // Không cho phép thuộc tính HTML nào cả
+  });
+  
   const userId = req.user.id;
 
   if (!content || content.trim() === '') {

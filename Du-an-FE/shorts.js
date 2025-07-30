@@ -224,14 +224,35 @@ function renderShort(short, appendToTop = true) {
     hour: '2-digit', minute: '2-digit'
   });
 
-  videoWrapper.innerHTML = `
-    <video src="${short.video_url}" controls muted preload="metadata"></video>
-    <div class="short-info">
-      <div class="username">@${short.username}</div>
-      <div class="created-at">Đã đăng vào ${createdText}</div>
-      <div class="caption">${short.caption || ''}</div>
-    </div>
-  `;
+  const video = document.createElement("video");
+  video.src = short.video_url;
+  video.controls = true;
+  video.muted = true;
+  video.preload = "metadata";
+  
+  const shortInfo = document.createElement("div");
+  shortInfo.className = "short-info";
+  
+  const usernameDiv = document.createElement("div");
+  usernameDiv.className = "username";
+  usernameDiv.textContent = `@${short.username}`;
+  
+  const createdAtDiv = document.createElement("div");
+  createdAtDiv.className = "created-at";
+  createdAtDiv.textContent = `Đã đăng vào ${createdText}`;
+  
+  const captionDiv = document.createElement("div");
+  captionDiv.className = "caption";
+  captionDiv.textContent = short.caption || "";
+  
+  shortInfo.appendChild(usernameDiv);
+  shortInfo.appendChild(createdAtDiv);
+  shortInfo.appendChild(captionDiv);
+  
+  videoWrapper.innerHTML = ""; // clear trước
+  videoWrapper.appendChild(video);
+  videoWrapper.appendChild(shortInfo);
+  
 
   const separator = document.createElement('hr');
   separator.className = 'video-separator';

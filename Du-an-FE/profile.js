@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       usernameInput.value = data.username || "";
       emailInput.value = data.email || "";
   
-      document.querySelector(".name").textContent = data.username;
+      document.getElementById("displayName").textContent = data.username;
       document.querySelector(".username").textContent = `@${data.username.toLowerCase()}`;
   
       if (data.avatar_url) {
@@ -131,13 +131,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       posts.forEach(post => {
         const postEl = document.createElement("div");
         postEl.className = "post";
-        postEl.innerHTML = `
-          <button class="delete-post-btn" data-id="${post.id}">🗑 Xoá</button>
-          <p class="users"><strong>${post.username}</strong></p>
-          <p class="contents">${post.content}</p>
-          <p><small>${new Date(post.created_at).toLocaleString()}</small></p>
-
-        `;
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-post-btn";
+        deleteBtn.dataset.id = post.id;
+        deleteBtn.textContent = "🗑 Xoá";
+        
+        const usernameP = document.createElement("p");
+        usernameP.className = "users";
+        const strong = document.createElement("strong");
+        strong.textContent = post.username;
+        usernameP.appendChild(strong);
+        
+        const contentP = document.createElement("p");
+        contentP.className = "contents";
+        contentP.textContent = post.content;
+        
+        const timeP = document.createElement("p");
+        const small = document.createElement("small");
+        small.textContent = new Date(post.created_at).toLocaleString();
+        timeP.appendChild(small);
+        
+        // Clear rồi append
+        postEl.innerHTML = ""; // hoặc bỏ luôn dòng này nếu tạo postEl sau
+        postEl.appendChild(deleteBtn);
+        postEl.appendChild(usernameP);
+        postEl.appendChild(contentP);
+        postEl.appendChild(timeP);
+        
         userPostsContainer.appendChild(postEl);
       });
   

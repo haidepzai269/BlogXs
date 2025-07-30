@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng nhập / Đăng ký Blog</title>
   <link rel="stylesheet" href="auth.css">
+  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
@@ -22,6 +23,9 @@
             <h2>Đăng nhập</h2>
             <input type="email" placeholder="Email" name="email" required>
             <input type="password" placeholder="Mật khẩu" name="password" required>
+            <div class="forgot-password">
+              <a href="forgot-password.html">Quên mật khẩu?</a>
+            </div>            
             <button type="submit">Đăng nhập</button>
           </form>
 
@@ -37,6 +41,35 @@
       </div>
     </div>    
   </div>
+
+
+  <!-- Sóng động nền -->
+<div class="wave-container">
+  <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+    <path d="M0,100 C300,200 900,0 1200,100 L1200,200 L0,200 Z" fill="#00ffff33">
+      <animate 
+        attributeName="d" 
+        dur="10s" 
+        repeatCount="indefinite"
+        values="
+          M0,100 C300,200 900,0 1200,100 L1200,200 L0,200 Z;
+          M0,120 C300,180 900,20 1200,120 L1200,200 L0,200 Z;
+          M0,100 C300,200 900,0 1200,100 L1200,200 L0,200 Z
+        "
+      />
+    </path>
+  </svg>
+</div>
+<!-- SVG viết tay hiệu ứng BlogXs -->
+<div class="svg-effect-auth">
+  <svg viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+          font-size="64" font-family="Pacifico, cursive" fill="none" stroke="#00ffff"
+          stroke-width="2" class="svg-text-auth">
+      BlogXs
+    </text>
+  </svg>
+</div>
 
   <script src="auth.js"></script>
 </body>

@@ -1,14 +1,20 @@
 /* Reset & layout */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
+  background-size: 600% 600%;
+  animation: gradientFlow 20s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   
   .container {
     width: 400px;
@@ -106,3 +112,109 @@ body {
     margin-bottom: 5px;
   }
   
+  .forgot-password {
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 4px;
+  }
+  
+  .forgot-password a {
+    color: #00ffffcc;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  
+  .forgot-password a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+  
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: -1; /* nằm dưới giao diện */
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .wave-container svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* SVG viết tay BlogXs cho trang auth */
+.svg-effect-auth {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 120px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.svg-text-auth {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawText 6s ease forwards, glowPulse 1.5s ease-in-out infinite, resetDraw 6s linear infinite;
+  filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+  stroke-linecap: round; /* Nét tròn mượt hơn */
+  fill: none;             /* Không đổ màu */
+  stroke: #00ffff;
+  stroke-width: 2.5;      /* Có thể giảm nếu nét quá đậm */
+  font-family: 'Great Vibes', cursive;
+}
+
+
+@keyframes drawText {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 20px #00ffff);
+  }
+  100% {
+    filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+  }
+}
+
+/* Reset hiệu ứng để nó lặp lại */
+@keyframes resetDraw {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  10% {
+    stroke-dashoffset: 1000;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+  80% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 1000;
+  }
+}

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
 // =====================
 // 🎆 Hàm tạo hiệu ứng tia sáng
 // =====================
@@ -180,6 +181,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       postEl.className = 'post';
       const count = likeCounts[post.id] || 0;
       postEl.innerHTML = `
+        <div class="post-header">
+         <button class="share-btn" data-post-id="${post.id}">
+           <i class="ph ph-share-fat"></i>
+         </button>
+        </div>
       <span class="username">@${post.username}</span>
       <p class="content-text">${post.content}</p>
       <div class="post-footer">
@@ -887,3 +893,39 @@ function showToast(message, options = {}) {
 window.addEventListener('DOMContentLoaded', () => {
   initI18n();
 });
+
+
+
+// Xử lý nút share (chia sẻ link bài viết)
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('share-btn')) {
+    const postId = e.target.dataset.postId;
+    const url = `${window.location.origin}/post/${postId}`;
+
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        showShareToast("📋 Đã sao chép link bài viết!");
+      })
+      .catch(err => {
+        console.error("❌ Không thể sao chép:", err);
+        prompt("Sao chép thủ công:", url);
+      });
+  }
+});
+
+// Hàm hiển thị toast sau khi share
+function showShareToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'custom-toast';
+  toast.innerText = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 500);
+  }, 3000);
+}

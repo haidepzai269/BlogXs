@@ -26,5 +26,12 @@ router.get('/me', authenticateToken, async (req, res) => {
       res.status(500).json({ message: 'Lỗi server' });
     }
   });
-  
+  // Gửi mã xác nhận
+router.post("/forgot-password", authController.forgotPassword);
+
+// Xác minh mã và đặt lại mật khẩu
+router.post("/reset-password", authController.resetPassword);
+// ... các dòng import và route khác
+router.post("/verify-code", authController.verifyCode);
+
 module.exports = router;
