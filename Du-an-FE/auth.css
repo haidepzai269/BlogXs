@@ -2,24 +2,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
-body {
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
   background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
   background-size: 600% 600%;
   animation: gradientFlow 20s ease infinite;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ép .container chiếm hết phần còn lại */
+.container {
+
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 12px;
 }
 
-  
-  .container {
-    width: 400px;
-    position: relative;
-  }
   
   .form-box {
     background: rgba(255, 255, 255, 0.05);
@@ -167,16 +174,17 @@ body {
   height: 120px;
   z-index: 999;
   pointer-events: none;
+
 }
 
 .svg-text-auth {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   animation: drawText 6s ease forwards, glowPulse 1.5s ease-in-out infinite, resetDraw 6s linear infinite;
-  filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+  filter: drop-shadow(0 0 6px #f6ff00) drop-shadow(0 0 12px #f6ff00);
   stroke-linecap: round; /* Nét tròn mượt hơn */
   fill: none;             /* Không đổ màu */
-  stroke: #00ffff;
+  stroke: #EFE1C6;
   stroke-width: 2.5;      /* Có thể giảm nếu nét quá đậm */
   font-family: 'Great Vibes', cursive;
 }
@@ -190,13 +198,13 @@ body {
 
 @keyframes glowPulse {
   0% {
-    filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+    filter: drop-shadow(0 0 6px #EFE1C6) drop-shadow(0 0 12px #EFE1C6);
   }
   50% {
-    filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 20px #00ffff);
+    filter: drop-shadow(0 0 10px #EFE1C6) drop-shadow(0 0 20px #EFE1C6);
   }
   100% {
-    filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff);
+    filter: drop-shadow(0 0 6px #EFE1C6) drop-shadow(0 0 12px #EFE1C6);
   }
 }
 
@@ -217,4 +225,25 @@ body {
   100% {
     stroke-dashoffset: 1000;
   }
+}
+
+
+.footer {
+  background: none;               /* Không nền */
+  color: #aeeeee;                 /* Xanh ngọc nhẹ */
+  text-align: center;
+  padding: 12px 0;
+  font-size: 0.85rem;
+  font-family: 'Satisfy', cursive;
+  letter-spacing: 0.3px;
+}
+
+.footer p {
+  margin: 0;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.footer p:hover {
+  opacity: 1;
 }

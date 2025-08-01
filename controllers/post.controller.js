@@ -161,3 +161,26 @@ exports.deletePost = async (req, res) => {
     res.status(500).json({ error: 'Lỗi server khi xoá bài viết' });
   }
 };
+
+
+//
+exports.getPostById = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const query = 'SELECT * FROM posts WHERE id = $1';
+    const values = [postId];
+
+    const result = await db.query(query, values);
+    const rows = result.rows;
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy bài viết' });
+    }
+
+    res.json({ post: rows[0] });
+  } catch (err) {
+    console.error('❌ Lỗi truy vấn bài viết:', err);
+    res.status(500).json({ message: 'Lỗi server' });
+  }
+};
