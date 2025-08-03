@@ -902,3 +902,51 @@ body {
 
 
 
+/* ========================= */
+/* 📱 Mobile (max 768px) */
+/* ========================= */
+/* Ẩn thanh bottom-navbar mặc định */
+.sidebar {
+  display: flex;
+}
+
+.bottom-navbar {
+  display: none;
+}
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none !important;
+  }
+
+  .bottom-navbar {
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    border-top: 1px solid #222;
+    padding: 8px 0;
+    z-index: 9999;
+  }
+  .bottom-navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .bottom-navbar button:hover {
+    transform: scale(1.2);
+    color: #1da1f2;
+  }
+}
+
+
+
