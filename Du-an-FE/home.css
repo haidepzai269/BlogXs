@@ -194,7 +194,7 @@ html {
 }
 .like-count {
   color: #555;
-  margin-right: 1000px;
+  margin-right: 0;
   margin-top: 5px;
 }
 
@@ -948,5 +948,45 @@ body {
   }
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.container {
+  width: 100%;
+  overflow-x: hidden;
+}
+.current-time {
+  max-width: 90vw;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .current-time {
+    font-size: 12px;
+    top: 50px;
+    right: 10px;
+    padding: 4px 8px;
+  }
+}
+@media (max-width: 768px) {
+  .notification-wrapper {
+    top: 8px;
+    right: 10px;
+  }
+
+  #toggleMusicBtn {
+    font-size: 20px;
+    bottom: 60px; /* tránh che bottom-navbar */
+    right: 10px;
+  }
+
+  .notification-popup {
+    width: 90vw;
+    max-width: 350px;
+    right: 0;
+    left: 5%;
+  }
+}
 
 
